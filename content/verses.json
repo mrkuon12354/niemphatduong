@@ -1,0 +1,38 @@
+{
+  "items": [
+    {
+      "id": "tan-phat-ke",
+      "version": 1,
+      "status": "reviewed",
+      "source": "Văn bản do chủ dự án cung cấp",
+      "title": "Tán Phật kệ",
+      "lines": [
+        "A Di Đà Phật thân kim sắc",
+        "Tướng hảo quang minh vô đẳng luân",
+        "Bạch hào uyển chuyển ngũ Tu Di",
+        "Cám mục trừng thanh tứ đại hải",
+        "Quang trung hóa Phật vô số ức",
+        "Hóa Bồ Tát chúng diệc vô biên",
+        "Tứ thập bát nguyện độ chúng sanh",
+        "Cửu phẩm hàm linh đăng bỉ ngạn."
+      ]
+    },
+    {
+      "id": "hoi-huong",
+      "version": 1,
+      "status": "reviewed",
+      "source": "Văn bản do chủ dự án cung cấp",
+      "title": "Hồi hướng",
+      "lines": [
+        "Nguyện đem công đức này",
+        "Trang nghiêm Phật Tịnh Độ",
+        "Trên đền bốn ơn nặng",
+        "Dưới cứu khổ tam đồ",
+        "Nếu có ai thấy nghe",
+        "Đều phát Bồ Đề tâm",
+        "Hết một báo thân này",
+        "Đồng sanh Cực Lạc quốc."
+      ]
+    }
+  ]
+}

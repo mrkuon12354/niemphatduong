@@ -3,7 +3,10 @@
 import { APP_NAME, FONT_STEPS } from './config.js';
 import { S } from './strings.js';
 import { initStorage, getSettings, saveSettings, getStorageMode } from './storage.js';
-import { el, icon, toast, applyAppearance, onSystemThemeChange, pageTitle, card } from './ui.js';
+import {
+  el, icon, button, toast, applyAppearance, onSystemThemeChange, pageTitle, card,
+} from './ui.js';
+import { startReminders } from './reminders.js';
 import { renderToday } from './today.js';
 import { renderCounter } from './counter.js';
 import { renderSchedule } from './schedule.js';
@@ -74,6 +77,7 @@ ctx.nextFontSize = (direction) => FONT_STEPS[FONT_STEPS.indexOf(settings.fontSiz
 
 let main = null;
 let nav = null;
+let banner = null;
 
 function buildShell() {
   const fontButton = (label, text, direction) => {
@@ -108,7 +112,26 @@ function buildShell() {
         icon(route.nav),
         el('span', { class: 'nav-label' }, S.nav[route.nav]))));
 
-  document.getElementById('app').replaceChildren(header, main, nav);
+  banner = el('div', { class: 'banner', role: 'status', hidden: true });
+
+  document.getElementById('app').replaceChildren(header, banner, main, nav);
+}
+
+// Dải nhắc giờ thời khóa ở đầu màn hình, nằm yên cho tới khi người dùng bấm.
+function showReminder(type) {
+  const close = () => { banner.hidden = true; };
+  banner.replaceChildren(
+    el('p', {}, S.reminder.text[type]),
+    el('div', { class: 'row' },
+      button(S.reminder.open, {
+        variant: 'primary',
+        onclick: () => {
+          close();
+          ctx.navigate('#/thoi-khoa');
+        },
+      }),
+      button(S.reminder.later, { onclick: close })));
+  banner.hidden = false;
 }
 
 // ---------------------------------------------------------------------------
@@ -167,6 +190,7 @@ async function start() {
   buildShell();
   window.addEventListener('hashchange', () => renderCurrentRoute({ moveFocus: true }));
   await renderCurrentRoute();
+  startReminders(ctx, showReminder);
   if ((await getStorageMode()) === 'memory') toast(S.common.notSaving);
 }
 

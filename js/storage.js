@@ -226,7 +226,7 @@ function newMeta() {
   };
 }
 
-function newId() {
+export function newId() {
   if (crypto.randomUUID) return crypto.randomUUID();
   // Dự phòng: randomUUID chỉ có trên https hoặc localhost.
   const b = crypto.getRandomValues(new Uint8Array(16));
@@ -314,7 +314,9 @@ function isValidSession(s) {
     typeof s.phrase === 'string' &&
     [s.startedAt, s.endedAt, s.createdAt, s.updatedAt].every(isValidTime) &&
     isCount(s.count) && isCount(s.durationSec) &&
-    SESSION_TYPES.includes(s.type)
+    SESSION_TYPES.includes(s.type) &&
+    (s.slot === undefined || typeof s.slot === 'string') &&
+    (s.deletedAt === undefined || isValidTime(s.deletedAt))
   );
 }
 
@@ -327,39 +329,101 @@ function isValidProgress(p) {
   );
 }
 
-// session: { startedAt, endedAt, phrase, count, durationSec, type }
-export async function addSession(session) {
-  const db = await initStorage();
-  const now = toLocalIso();
-  const record = {
-    id: newId(),
-    deviceId: await getDeviceId(),
-    startedAt: session.startedAt,
-    endedAt: session.endedAt,
-    phrase: session.phrase,
-    count: session.count,
-    durationSec: session.durationSec,
-    type: session.type,
-    createdAt: now,
-    updatedAt: now,
-  };
-  if (!isValidSession(record)) throw new Error('Thời niệm không hợp lệ');
-  await db.write([{ store: 'sessions', put: record }]);
-  return record;
+// Thêm một thời niệm mới.
+// session: { startedAt, endedAt, phrase, count, durationSec, type, slot? }
+export function addSession(session) {
+  return saveSession({ ...session, id: newId() });
+}
+
+// Lưu một thời niệm theo id: chưa có thì thêm, có rồi thì cập nhật.
+// Nhờ vậy thời đang niệm được lưu dần, máy tắt đột ngột cũng không mất.
+export function saveSession(session) {
+  return enqueue(async () => {
+    const db = await initStorage();
+    const old = await db.get('sessions', session.id);
+    const now = toLocalIso();
+    const record = {
+      id: session.id,
+      deviceId: old?.deviceId ?? (await getDeviceId()),
+      startedAt: session.startedAt,
+      endedAt: session.endedAt,
+      phrase: session.phrase,
+      count: session.count,
+      durationSec: session.durationSec,
+      type: session.type,
+      // Chỉ thập niệm mới có slot (lần nào trong ngày).
+      ...(session.slot ? { slot: session.slot } : {}),
+      createdAt: old?.createdAt ?? now,
+      updatedAt: now,
+    };
+    if (!isValidSession(record)) throw new Error('Thời niệm không hợp lệ');
+    await db.write([{ store: 'sessions', put: record }]);
+    return record;
+  });
+}
+
+// Bỏ một thời niệm: chỉ đánh dấu deletedAt chứ không xóa hẳn,
+// để sau này đồng bộ thì các máy khác cũng biết là đã bỏ.
+export function deleteSession(id) {
+  return enqueue(async () => {
+    const db = await initStorage();
+    const old = await db.get('sessions', id);
+    if (!old) return;
+    const now = toLocalIso();
+    await db.write([{ store: 'sessions', put: { ...old, deletedAt: now, updatedAt: now } }]);
+  });
 }
 
 export async function getSessions() {
   const db = await initStorage();
-  const sessions = await db.getAll('sessions');
+  await writeQueue; // Chờ ghi xong những việc đang xếp hàng
+  const sessions = (await db.getAll('sessions')).filter((s) => !s.deletedAt);
   return sessions.sort((a, b) => Date.parse(a.startedAt) - Date.parse(b.startedAt));
 }
 
-// Tổng số câu của một ngày, ví dụ getCountOfDate('2026-11-25')
-export async function getCountOfDate(dateKey) {
-  const sessions = await getSessions();
-  return sessions
-    .filter((s) => dateKeyOfIso(s.startedAt) === dateKey)
+// Các thời niệm của một ngày, ví dụ getSessionsOfDate('2026-11-25')
+export async function getSessionsOfDate(dateKey) {
+  return (await getSessions()).filter((s) => dateKeyOfIso(s.startedAt) === dateKey);
+}
+
+// Tổng số câu của một ngày. exceptId: bỏ qua thời niệm này (thời đang đếm dở).
+export async function getCountOfDate(dateKey, { exceptId } = {}) {
+  return (await getSessionsOfDate(dateKey))
+    .filter((s) => s.id !== exceptId)
     .reduce((sum, s) => sum + s.count, 0);
+}
+
+// Xin trình duyệt đừng tự dọn dữ liệu của app khi máy đầy.
+export async function requestPersistence() {
+  try {
+    if (!(await navigator.storage.persisted())) await navigator.storage.persist();
+  } catch {
+    // Trình duyệt không hỗ trợ: bỏ qua.
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Nhật ký nhắc giờ: nhớ lần nhắc gần nhất, để không nhắc lại nhiều lần.
+// ---------------------------------------------------------------------------
+
+export async function getReminderLog() {
+  const db = await initStorage();
+  return (await db.get('kv', 'reminderLog'))?.values ?? {};
+}
+
+export function saveReminderLog(patch) {
+  return enqueue(async () => {
+    const db = await initStorage();
+    const old = await db.get('kv', 'reminderLog');
+    const now = toLocalIso();
+    await db.write([{
+      store: 'kv',
+      put: {
+        id: 'reminderLog', values: { ...old?.values, ...patch },
+        createdAt: old?.createdAt ?? now, updatedAt: now,
+      },
+    }]);
+  });
 }
 
 // ---------------------------------------------------------------------------
@@ -368,6 +432,7 @@ export async function getCountOfDate(dateKey) {
 
 export async function exportAll() {
   const db = await initStorage();
+  await writeQueue;
   return {
     app: APP_ID,
     appVersion: APP_VERSION,
@@ -423,7 +488,7 @@ export function importAll(jsonText) {
         if (!isNewer(record, existing)) continue;
         ops.push({ store, put: record });
         known.set(record.id, record);
-        if (store === 'sessions' && !existing) added += 1;
+        if (store === 'sessions' && !existing && !record.deletedAt) added += 1;
       }
     }
 

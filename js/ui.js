@@ -42,8 +42,10 @@ export function comingSoon(title, stage) {
 }
 
 // Nhóm lựa chọn "chọn một". options: [{ value, label, hint }]
-export function choiceGroup({ name, label, options, value, onchange }) {
-  return el('div', { class: 'choices', role: 'radiogroup', 'aria-label': label },
+// inline: xếp các lựa chọn cạnh nhau thay vì mỗi dòng một lựa chọn.
+export function choiceGroup({ name, label, options, value, onchange, inline = false }) {
+  const className = inline ? 'choices choices-inline' : 'choices';
+  return el('div', { class: className, role: 'radiogroup', 'aria-label': label },
     options.map((option) => {
       const input = el('input', {
         type: 'radio', name, value: option.value, checked: option.value === value,
@@ -55,6 +57,33 @@ export function choiceGroup({ name, label, options, value, onchange }) {
           option.label,
           option.hint ? el('span', { class: 'muted' }, ` (${option.hint})`) : null));
     }));
+}
+
+// Ô nhập số nguyên. Nhập sai hoặc quá giới hạn thì tự sửa về giá trị hợp lệ.
+export function numberField({ label, value, min, max, onchange }) {
+  let current = value;
+  const input = el('input', {
+    class: 'field', type: 'number', inputmode: 'numeric', min, max, step: 1, value,
+    onchange: () => {
+      const typed = Math.round(Number(input.value));
+      if (input.value !== '' && Number.isFinite(typed)) current = Math.min(max, Math.max(min, typed));
+      input.value = current;
+      onchange(current);
+    },
+  });
+  const node = el('label', { class: 'field-row' }, el('span', {}, label), input);
+  node.getValue = () => current;
+  return node;
+}
+
+export function timeField({ label, value, onchange }) {
+  const input = el('input', {
+    class: 'field', type: 'time', value,
+    onchange: () => {
+      if (input.value) onchange(input.value.slice(0, 5));
+    },
+  });
+  return el('label', { class: 'field-row' }, el('span', {}, label), input);
 }
 
 export function toggle({ label, checked, onchange }) {

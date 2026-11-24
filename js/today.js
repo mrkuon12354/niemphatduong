@@ -4,7 +4,8 @@
 import { S } from './strings.js';
 import { toDateKey } from './dates.js';
 import { getCountOfDate } from './storage.js';
-import { el, pageTitle, card } from './ui.js';
+import { startFreePractice } from './counter.js';
+import { el, button, pageTitle, card } from './ui.js';
 
 export async function renderToday(page, ctx) {
   const now = new Date();
@@ -14,7 +15,7 @@ export async function renderToday(page, ctx) {
   page.append(
     pageTitle(S.today.title),
     el('p', { class: 'solar-date' }, S.today.solarDate(now)),
-    el('a', { class: 'btn btn-primary btn-big', href: '#/niem-phat' }, S.today.start),
+    button(S.today.start, { variant: 'primary btn-big', onclick: () => startFreePractice(ctx) }),
     card(S.today.countLabel,
       el('p', { class: 'big-number' },
         S.common.number(count), ' ',

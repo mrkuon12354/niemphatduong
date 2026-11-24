@@ -1,10 +1,15 @@
-// settings.js — Màn hình "Cài đặt". (Giờ nhắc thời khóa sẽ thêm ở Giai đoạn B.)
+// settings.js — Màn hình "Cài đặt".
 
-import { APP_VERSION, PHRASES, THEMES, WOODFISH_BPM } from './config.js';
+import { APP_VERSION, PHRASES, THEMES } from './config.js';
 import { S } from './strings.js';
 import { toDateKey } from './dates.js';
 import { exportAll, importAll, eraseAll, getSessions, getStorageMode, BackupError } from './storage.js';
-import { el, button, pageTitle, card, choiceGroup, toggle, toast, confirmDialog } from './ui.js';
+import { discardAllPractices } from './practice.js';
+import { notificationStatus, askNotificationPermission } from './reminders.js';
+import { woodfishControl } from './controls.js';
+import {
+  el, button, pageTitle, card, choiceGroup, toggle, timeField, toast, confirmDialog,
+} from './ui.js';
 
 export async function renderSettings(page, ctx) {
   const T = S.settings;
@@ -22,28 +27,14 @@ export async function renderSettings(page, ctx) {
   const smaller = fontStep(T.fontSmaller, -1);
   const larger = fontStep(T.fontLarger, 1);
 
-  // --- Tốc độ mõ ---
-  const bpmText = el('p', { class: 'setting-value', 'aria-live': 'polite' });
-  const bpmStep = (label, direction) => button(label, {
-    onclick: () => {
-      const next = ctx.getSettings().woodfishBpm + direction * WOODFISH_BPM.step;
-      ctx.updateSettings({
-        woodfishBpm: Math.min(WOODFISH_BPM.max, Math.max(WOODFISH_BPM.min, next)),
-      });
-    },
-  });
-  const slower = bpmStep(T.woodfishSlower, -1);
-  const faster = bpmStep(T.woodfishFaster, 1);
-
   // Cập nhật các nút khi cài đặt đổi (kể cả đổi bằng nút A−/A+ trên đầu trang).
-  const update = (s) => {
+  const update = () => {
     smaller.disabled = !ctx.nextFontSize(-1);
     larger.disabled = !ctx.nextFontSize(1);
-    bpmText.textContent = T.woodfishValue(s.woodfishBpm);
-    slower.disabled = s.woodfishBpm <= WOODFISH_BPM.min;
-    faster.disabled = s.woodfishBpm >= WOODFISH_BPM.max;
   };
-  update(settings);
+  update();
+
+  const woodfish = woodfishControl(ctx);
 
   // --- Dữ liệu ---
   const fileInput = el('input', {
@@ -71,15 +62,14 @@ export async function renderSettings(page, ctx) {
         })),
         onchange: (phrase) => ctx.updateSettings({ phrase }),
       })),
-    card(T.woodfishTitle,
-      bpmText,
-      el('div', { class: 'row' }, slower, faster)),
+    card(T.woodfishTitle, woodfish.node),
     card(T.vibrateTitle,
       toggle({
         label: T.vibrateLabel, checked: settings.vibrate,
         onchange: (vibrate) => ctx.updateSettings({ vibrate }),
       }),
       el('p', { class: 'muted' }, T.vibrateHint)),
+    reminderCard(ctx),
     card(T.dataTitle,
       mode === 'memory' ? el('p', { class: 'warning' }, S.common.notSaving) : null,
       el('p', {}, T.dataIntro),
@@ -95,7 +85,52 @@ export async function renderSettings(page, ctx) {
         el('a', { class: 'btn btn-secondary', href: '#/rieng-tu' }, T.privacy)),
       el('p', { class: 'muted' }, T.version(APP_VERSION))));
 
-  return ctx.onSettingsChange(update);
+  const removeListener = ctx.onSettingsChange(update);
+  return () => {
+    removeListener();
+    woodfish.cleanup();
+  };
+}
+
+function reminderCard(ctx) {
+  const T = S.settings;
+  const settings = ctx.getSettings();
+
+  const plan = (label, onKey, timeKey) => {
+    const time = timeField({
+      label: T.reminderTime, value: settings[timeKey],
+      onchange: (value) => ctx.updateSettings({ [timeKey]: value }),
+    });
+    time.hidden = !settings[onKey];
+    return [
+      toggle({
+        label, checked: settings[onKey],
+        onchange: (checked) => {
+          time.hidden = !checked;
+          ctx.updateSettings({ [onKey]: checked });
+        },
+      }),
+      time,
+    ];
+  };
+
+  const status = el('p', { class: 'muted' });
+  const ask = button(T.reminderAsk, {
+    onclick: async () => showStatus(await askNotificationPermission()),
+  });
+  const showStatus = (value) => {
+    status.textContent = T.reminderStatus[value];
+    ask.hidden = value !== 'default';
+  };
+  showStatus(notificationStatus());
+
+  return card(T.reminderTitle,
+    el('div', { class: 'stack' },
+      plan(T.reminderMorning, 'remindMorningOn', 'remindMorningTime'),
+      plan(T.reminderEvening, 'remindEveningOn', 'remindEveningTime'),
+      el('p', {}, T.reminderNote),
+      status,
+      ask));
 }
 
 async function backup() {
@@ -133,6 +168,7 @@ async function erase(ctx) {
   });
   if (!ok) return;
   try {
+    discardAllPractices();
     await eraseAll();
     await ctx.reloadSettings();
     await ctx.refresh();

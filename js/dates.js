@@ -2,7 +2,7 @@
 
 const pad = (n) => String(n).padStart(2, '0');
 
-// Đổi Date thành chuỗi ISO có múi giờ, ví dụ "2026-11-25T05:30:00+07:00".
+// Đổi Date thành chuỗi ISO có múi giờ, ví dụ "2026-11-25T05:30:00.000+07:00".
 // Không dùng toISOString() vì hàm đó đổi sang giờ quốc tế (UTC):
 // niệm lúc 5 giờ sáng ở Việt Nam sẽ bị ghi thành ngày hôm trước.
 export function toLocalIso(date = new Date()) {
@@ -12,6 +12,7 @@ export function toLocalIso(date = new Date()) {
   return (
     `${toDateKey(date)}T` +
     `${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}` +
+    `.${String(date.getMilliseconds()).padStart(3, '0')}` +
     `${sign}${pad(Math.floor(abs / 60))}:${pad(abs % 60)}`
   );
 }

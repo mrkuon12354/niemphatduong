@@ -1,0 +1,28 @@
+{
+  "items": [
+    {
+      "id": "thap-niem",
+      "version": 1,
+      "status": "draft",
+      "source": "",
+      "title": "Thập niệm pháp",
+      "phrase": "a-di-da-phat",
+      "countPerSlot": 10,
+      "description": [
+        "Dành cho người bận rộn. Mỗi lần niệm liền 10 câu “A Di Đà Phật”, gợi ý 9 lần mỗi ngày.",
+        "Niệm xong lần nào thì chạm vào dòng đó. Chạm nhầm thì chạm lại để bỏ."
+      ],
+      "slots": [
+        { "id": "thuc-day", "label": "Lúc thức dậy" },
+        { "id": "truoc-bua-sang", "label": "Trước bữa ăn sáng" },
+        { "id": "bat-dau-viec-sang", "label": "Bắt đầu công việc buổi sáng" },
+        { "id": "ket-thuc-viec-sang", "label": "Kết thúc công việc buổi sáng" },
+        { "id": "truoc-bua-trua", "label": "Trước bữa ăn trưa" },
+        { "id": "bat-dau-viec-chieu", "label": "Bắt đầu công việc buổi chiều" },
+        { "id": "ket-thuc-viec-chieu", "label": "Kết thúc công việc buổi chiều" },
+        { "id": "truoc-bua-toi", "label": "Trước bữa ăn tối" },
+        { "id": "truoc-khi-ngu", "label": "Trước khi ngủ" }
+      ]
+    }
+  ]
+}

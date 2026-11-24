@@ -1,7 +1,7 @@
 # Kiến trúc app Niệm Phật Đường
 
 Tài liệu này dành cho người mới học lập trình. Nó được cập nhật sau mỗi giai đoạn.
-Hiện đang ở **Giai đoạn A** (khung app, giao diện, lưu dữ liệu).
+Hiện đã xong **Giai đoạn A** (khung app) và **B** (Niệm Phật, Thời khóa).
 
 ## 1. Cấu trúc thư mục
 
@@ -17,15 +17,28 @@ Hiện đang ở **Giai đoạn A** (khung app, giao diện, lưu dữ liệu).
 | `js/ui.js` | Nút, thẻ, hộp hỏi, biểu tượng dùng chung. |
 | `js/app.js` | Khởi động app và chuyển màn hình. |
 | `js/today.js` | Màn hình Hôm nay. |
-| `js/counter.js` | Màn hình Niệm Phật (Giai đoạn B). |
-| `js/schedule.js` | Màn hình Thời khóa (Giai đoạn B). |
+| `js/practice.js` | "Bộ máy" một thời niệm: đếm, tính giờ, lưu dần. Không vẽ giao diện. |
+| `js/counter.js` | Vòng tròn đếm và màn hình Niệm Phật. |
+| `js/schedule.js` | Màn hình Thời khóa và Thập niệm pháp. |
+| `js/sound.js` | Mõ, chuông, phát file ghi âm. |
+| `js/device.js` | Rung, giữ sáng màn hình. |
+| `js/reminders.js` | Nhắc giờ thời khóa. |
+| `js/controls.js` | Bộ nút chỉnh mõ, hẹn giờ dùng ở nhiều màn hình. |
+| `js/content.js` | Đọc nội dung từ các file JSON. |
+| `js/verses.js` | Hiển thị bài kệ và nhãn CẦN THẨM ĐỊNH. |
+| `content/verses.json` | Tán Phật kệ, Hồi hướng. |
+| `content/practices.json` | Thập niệm pháp (bản nháp). |
+| `audio/playlist.json` | Danh sách file ghi âm; cách thêm xem `audio/README.md`. |
 | `js/calendar.js` | Màn hình Lịch (Giai đoạn C). |
 | `js/lessons.js` | Màn hình Học (Giai đoạn D). |
 | `js/settings.js` | Màn hình Cài đặt. |
 | `js/info.js` | Trang Giới thiệu và Chính sách riêng tư. |
 
-Sẽ thêm ở giai đoạn sau: `content/` (nội dung dạng JSON), `js/lunar.js` (âm lịch),
-`audio/`, `icons/`, `manifest.json`, `sw.js`.
+Sẽ thêm ở giai đoạn sau: `content/holidays.json`, `quotes.json`, `lessons.json`,
+`js/lunar.js` (âm lịch), `icons/`, `manifest.json`, `sw.js`.
+
+Mỗi mục nội dung có `id`, `version`, `status` và `source`. Khi `status` là `"draft"`, app hiện nhãn
+CẦN THẨM ĐỊNH. Thẩm định xong thì đổi thành `"reviewed"` và ghi nguồn vào `source`.
 
 Chữ duy nhất nằm ngoài `strings.vi.js` là vài dòng trong `index.html` (tiêu đề, lời báo khi
 JavaScript chưa chạy được), vì lúc đó app chưa đọc được file chữ.
@@ -70,7 +83,12 @@ Một thời niệm:
 }
 ```
 
+Thập niệm có thêm `slot` (lần nào trong ngày). Bản ghi bị bỏ có thêm `deletedAt`.
+Kho `kv` còn có bản ghi `reminderLog`: lần nhắc giờ gần nhất.
+
 Vài quy tắc:
+
+- **Thời đang niệm được lưu dần** vào cùng một bản ghi (cùng `id`), nên máy tắt đột ngột cũng không mất.
 
 - **Không lưu tổng số câu.** Tổng luôn cộng lại từ các thời niệm, nên gộp dữ liệu nhiều máy không bị cộng trùng.
 - **Ngày của một thời niệm** là 10 ký tự đầu của `startedAt`, tức ngày tại nơi người dùng đã niệm.
@@ -83,8 +101,8 @@ Vài quy tắc:
 1. Chọn máy chủ (Supabase hoặc Firebase), điền `API_URL` trong `config.js`.
 2. Nới dòng `Content-Security-Policy` trong `index.html` cho đúng địa chỉ máy chủ đó.
    Hiện dòng này chặn mọi kết nối ra ngoài.
-3. Thêm cách đánh dấu "đã xóa" (`deletedAt`) cho bản ghi. Hiện app xóa hẳn; khi có nhiều máy,
-   máy khác cần biết bản ghi nào đã bị xóa.
+3. Quyết định nút "Xóa toàn bộ dữ liệu" có xóa cả trên máy chủ hay không. Hiện nút này xóa hẳn
+   trên máy (bỏ tích thập niệm thì chỉ đánh dấu `deletedAt`).
 4. Thêm lớp đồng bộ trong `storage.js`: gửi bản ghi mới, nhận bản ghi về, gộp theo `id` và `updatedAt`
    giống hàm `importAll()`.
 5. Hỏi ý người dùng trước khi bật đồng bộ; cập nhật trang Chính sách riêng tư.
