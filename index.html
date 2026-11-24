@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <!-- Luật an toàn: app chỉ được tải và kết nối tới chính nó, không gửi gì ra ngoài. -->
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; img-src 'self' data: blob:; media-src 'self' blob:; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <meta name="referrer" content="no-referrer">
+  <meta name="theme-color" content="#fbf6e9">
+  <meta name="description" content="App tu học Pháp môn Tịnh độ: niệm Phật, thời khóa, lịch âm. Miễn phí, không quảng cáo, chạy được khi không có mạng.">
+  <title>Niệm Phật Đường</title>
+  <!-- Biểu tượng thật sẽ thêm ở Giai đoạn E. -->
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- js/app.js dựng toàn bộ giao diện vào đây. Dòng chữ bên trong chỉ hiện
+       nếu sau 3 giây app vẫn chưa chạy (ví dụ mở thẳng file bằng cách bấm đúp). -->
+  <div id="app">
+    <p class="boot-message">Đang mở app… Nếu màn hình này không đổi, xin xem cách chạy trong file README.md.</p>
+  </div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <noscript>Trình duyệt đang tắt JavaScript nên app không chạy được.</noscript>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

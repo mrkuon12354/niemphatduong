@@ -1,0 +1,6 @@
+.DS_Store
+Thumbs.db
+__pycache__/
+.claude/settings.local.json
+# File sao lưu dữ liệu cá nhân: không đưa vào git
+niem-phat-duong-sao-luu-*.json
