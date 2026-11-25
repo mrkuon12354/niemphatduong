@@ -13,7 +13,9 @@ export function isMicrophoneSupported() {
 
 // Mở micro. Trả về hàm để đóng lại.
 //   onFrame(isVoice, ms): gọi liên tục, cho biết có tiếng hay không
-//   onStatus(status): 'starting' | 'warming' | 'listening' | 'denied' | 'unsupported' | 'failed'
+//   onStatus(status): 'starting' | 'warming' | 'listening'
+//                     | 'missing' | 'busy' | 'denied' | 'unsupported' | 'failed'
+// Máy chưa có micro ('missing') thì đợi; người dùng cắm micro vào là tự mở.
 export function openMicrophone({ sensitivity, onFrame, onStatus }) {
   let isClosed = false;
   let stream = null;
@@ -24,6 +26,7 @@ export function openMicrophone({ sensitivity, onFrame, onStatus }) {
     if (isClosed) return;
     isClosed = true;
     clearInterval(timer);
+    navigator.mediaDevices?.removeEventListener?.('devicechange', retry);
     source?.disconnect();
     stream?.getTracks().forEach((track) => track.stop());
     setMicrophoneMode(false);
@@ -33,6 +36,25 @@ export function openMicrophone({ sensitivity, onFrame, onStatus }) {
     if (isClosed) return;
     close();
     onStatus(status);
+  }
+
+  function start() {
+    open().catch((error) => {
+      console.error(error);
+      fail('failed');
+    });
+  }
+
+  function retry() {
+    navigator.mediaDevices.removeEventListener('devicechange', retry);
+    start();
+  }
+
+  function waitForDevice() {
+    if (isClosed) return;
+    setMicrophoneMode(false);
+    onStatus('missing');
+    navigator.mediaDevices.addEventListener?.('devicechange', retry);
   }
 
   async function open() {
@@ -48,7 +70,8 @@ export function openMicrophone({ sensitivity, onFrame, onStatus }) {
       });
     } catch (error) {
       console.warn('Không mở được micro.', error);
-      return fail(error.name === 'NotAllowedError' ? 'denied' : 'failed');
+      if (error.name === 'NotFoundError') return waitForDevice();
+      return fail({ NotAllowedError: 'denied', NotReadableError: 'busy' }[error.name] ?? 'failed');
     }
     if (isClosed) { // Người dùng đã nghỉ niệm trong lúc chờ cho phép
       stream.getTracks().forEach((track) => track.stop());
@@ -87,9 +110,6 @@ export function openMicrophone({ sensitivity, onFrame, onStatus }) {
     }, FRAME_MS);
   }
 
-  open().catch((error) => {
-    console.error(error);
-    fail('failed');
-  });
+  start();
   return close;
 }

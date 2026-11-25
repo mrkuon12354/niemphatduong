@@ -73,6 +73,8 @@ export const S = {
       warming: 'Xin giữ yên lặng một chút để máy làm quen.',
       listening: 'Đang lắng nghe.',
       voice: 'Đang nghe thấy tiếng.',
+      missing: 'Máy chưa có micro. Xin cắm micro hoặc tai nghe có micro vào, app sẽ tự nghe tiếp. Trong lúc đó vẫn chạm vòng tròn để đếm được.',
+      busy: 'Micro đang bận hoặc bị máy chặn. Xin đóng app khác đang dùng micro, rồi bấm Tạm nghỉ và Niệm tiếp.',
       denied: 'Micro đang bị chặn. Xin cho phép micro trong cài đặt trình duyệt, hoặc chạm vòng tròn để đếm.',
       unsupported: 'Không dùng được micro ở đây. Quý vị vẫn chạm vòng tròn để đếm được.',
       failed: 'Không mở được micro. Quý vị vẫn chạm vòng tròn để đếm được.',
