@@ -274,6 +274,10 @@ export const S = {
         body: 'Quý vị có thể sao lưu dữ liệu ra file, hoặc xóa toàn bộ dữ liệu bất cứ lúc nào trong phần Cài đặt. File sao lưu do quý vị tự giữ. Xóa dữ liệu trình duyệt cũng sẽ làm mất dữ liệu của app.',
       },
       {
+        heading: 'Khi mở app qua mạng',
+        body: 'App được tải về từ một dịch vụ lưu trữ trang web (ví dụ GitHub Pages). Như với mọi trang web, dịch vụ ấy có thể thấy địa chỉ mạng (IP) của máy khi tải trang. Số câu niệm và cài đặt không được gửi lên đó.',
+      },
+      {
         heading: 'Đường link ra ngoài',
         body: 'Một số mục “Đọc thêm” mở trang web khác. Khi đó, trang ấy áp dụng chính sách riêng của họ.',
       },
