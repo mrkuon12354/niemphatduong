@@ -141,10 +141,11 @@ button, .btn, .choice, .menu-link, .nav-item, .header-btn { user-select: none; -
 }
 
 .nav-item {
-  flex: 1 1 auto;
+  flex: 1 1 0; /* Năm mục rộng bằng nhau */
+  min-width: 0;
   max-width: 152px;
   min-height: 64px;
-  padding: 6px 0;
+  padding: 4px 0 5px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -160,12 +161,14 @@ button, .btn, .choice, .menu-link, .nav-item, .header-btn { user-select: none; -
   background: var(--highlight);
   border-top-color: var(--primary);
 }
-/* Cỡ cố định để năm mục luôn nằm trên một dòng. */
+/* Cỡ cố định. Tên mục nào cũng hai chữ: điện thoại mỗi chữ một dòng, màn hình rộng thì một dòng. */
 .nav-label {
   font-size: 18px;
   font-weight: 500;
-  line-height: 1.2;
-  letter-spacing: -0.01em;
+  line-height: 1.15;
+}
+@media (max-width: 519px) {
+  .nav-label { width: min-content; }
 }
 
 .icon {

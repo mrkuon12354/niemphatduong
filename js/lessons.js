@@ -1,4 +1,4 @@
-// lessons.js — Màn hình "Học". Làm ở Giai đoạn D.
+// lessons.js — Màn hình "Bài học". Làm ở Giai đoạn D.
 
 import { S } from './strings.js';
 import { comingSoon } from './ui.js';

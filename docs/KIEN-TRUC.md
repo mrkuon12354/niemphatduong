@@ -32,8 +32,8 @@ Hiện đã xong **Giai đoạn A** (khung app) và **B** (Niệm Phật, Thời
 | `content/verses.json` | Tán Phật kệ, Hồi hướng. |
 | `content/practices.json` | Thập niệm pháp (bản nháp). |
 | `audio/playlist.json` | Danh sách file ghi âm; cách thêm xem `audio/README.md`. |
-| `js/calendar.js` | Màn hình Lịch (Giai đoạn C). |
-| `js/lessons.js` | Màn hình Học (Giai đoạn D). |
+| `js/calendar.js` | Màn hình Lịch tháng (Giai đoạn C). |
+| `js/lessons.js` | Màn hình Bài học (Giai đoạn D). |
 | `js/settings.js` | Cài đặt: trang mục lục và bốn trang con. Mọi lựa chọn nằm ở đây. |
 | `js/info.js` | Trang Giới thiệu và Chính sách riêng tư. |
 

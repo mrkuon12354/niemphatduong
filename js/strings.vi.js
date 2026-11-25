@@ -9,11 +9,12 @@ const WEEKDAYS = [
 export const S = {
   nav: {
     label: 'Các mục chính',
+    // Tên mục nào cũng hai chữ, để thanh dưới đều nhau.
     today: 'Hôm nay',
     counter: 'Niệm Phật',
     schedule: 'Thời khóa',
-    lessons: 'Học',
-    calendar: 'Lịch',
+    lessons: 'Bài học',
+    calendar: 'Lịch tháng',
   },
 
   header: {
@@ -169,8 +170,8 @@ export const S = {
     later: 'Để sau',
   },
 
-  lessons: { title: 'Học' },
-  calendar: { title: 'Lịch' },
+  lessons: { title: 'Bài học' },
+  calendar: { title: 'Lịch tháng' },
 
   settings: {
     title: 'Cài đặt',

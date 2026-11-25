@@ -3,7 +3,7 @@
 
 export const APP_ID = 'niem-phat-duong'; // Mã nội bộ: đừng đổi, vì tên kho dữ liệu dựa vào đây.
 export const APP_NAME = 'Niệm Phật Đường';
-export const APP_VERSION = '0.2.4';
+export const APP_VERSION = '0.2.5';
 
 // Địa chỉ máy chủ. Để trống = app chạy hoàn toàn offline.
 export const API_URL = '';
