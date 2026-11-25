@@ -8,7 +8,7 @@ import { getVerse, getPractice } from './content.js';
 import { createPractice } from './practice.js';
 import { unlockSound } from './sound.js';
 import { counterView, recordingControl, showSaveError, summaryLine } from './counter.js';
-import { woodfishControl } from './controls.js';
+import { woodfishControl, countControl, stopControl } from './controls.js';
 import { el, button, pageTitle, card, choiceGroup, numberField, toggle } from './ui.js';
 import { verseView, reviewLabel } from './verses.js';
 
@@ -73,7 +73,9 @@ export async function renderSchedule(page, ctx) {
       label: T.goalCount, value: settings.goalCount, ...COUNT_LIMIT,
       onchange: (goalCount) => ctx.updateSettings({ goalCount }),
     });
+    const stop = stopControl(ctx);
     const showGoal = (kind) => {
+      stop.hidden = kind === 'free';
       minutes.hidden = kind !== 'minutes';
       count.hidden = kind !== 'count';
     };
@@ -90,13 +92,14 @@ export async function renderSchedule(page, ctx) {
             options: [
               { value: 'minutes', label: T.goalByMinutes },
               { value: 'count', label: T.goalByCount },
+              { value: 'free', label: T.goalFree },
             ],
             onchange: (goalKind) => {
               ctx.updateSettings({ goalKind });
               showGoal(goalKind);
             },
           }),
-          minutes, count)),
+          minutes, count, stop)),
       await drawThapNiem(sessions),
       el('a', { class: 'btn btn-secondary', href: '#/cai-dat' }, T.setReminder),
     ];
@@ -139,10 +142,12 @@ export async function renderSchedule(page, ctx) {
         },
       });
       const woodfish = woodfishControl(ctx);
-      cleanups.push(counter.cleanup, woodfish.cleanup);
+      const counting = countControl(ctx, practice);
+      cleanups.push(counter.cleanup, woodfish.cleanup, counting.cleanup);
       return [
         ...heading, pageTitle(S.counter.title), counter.node,
         card(S.counter.woodfishTitle, woodfish.node),
+        card(S.counter.countTitle, counting.node),
         ...(recording ? [card(S.counter.recordingTitle, recording)] : []),
         exitButton,
       ];
@@ -160,7 +165,8 @@ export async function renderSchedule(page, ctx) {
     const s = ctx.getSettings();
     return createPractice({
       ctx, type: flow.type, phrase: s.phrase, onSaveError: showSaveError,
-      goal: { kind: s.goalKind, value: s.goalKind === 'count' ? s.goalCount : s.goalMinutes },
+      goal: s.goalKind === 'free' ? null
+        : { kind: s.goalKind, value: s.goalKind === 'count' ? s.goalCount : s.goalMinutes },
     });
   }
 

@@ -45,7 +45,7 @@ export function comingSoon(title, stage) {
 // inline: xếp các lựa chọn cạnh nhau thay vì mỗi dòng một lựa chọn.
 export function choiceGroup({ name, label, options, value, onchange, inline = false }) {
   const className = inline ? 'choices choices-inline' : 'choices';
-  return el('div', { class: className, role: 'radiogroup', 'aria-label': label },
+  const node = el('div', { class: className, role: 'radiogroup', 'aria-label': label },
     options.map((option) => {
       const input = el('input', {
         type: 'radio', name, value: option.value, checked: option.value === value,
@@ -57,6 +57,11 @@ export function choiceGroup({ name, label, options, value, onchange, inline = fa
           option.label,
           option.hint ? el('span', { class: 'muted' }, ` (${option.hint})`) : null));
     }));
+  // Đổi lựa chọn từ bên ngoài (không gọi onchange).
+  node.setValue = (newValue) => {
+    for (const input of node.querySelectorAll('input')) input.checked = input.value === newValue;
+  };
+  return node;
 }
 
 // Ô nhập số nguyên. Nhập sai hoặc quá giới hạn thì tự sửa về giá trị hợp lệ.

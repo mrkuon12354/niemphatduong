@@ -20,10 +20,12 @@ Hiện đã xong **Giai đoạn A** (khung app) và **B** (Niệm Phật, Thời
 | `js/practice.js` | "Bộ máy" một thời niệm: đếm, tính giờ, lưu dần. Không vẽ giao diện. |
 | `js/counter.js` | Vòng tròn đếm và màn hình Niệm Phật. |
 | `js/schedule.js` | Màn hình Thời khóa và Thập niệm pháp. |
-| `js/sound.js` | Mõ, chuông, phát file ghi âm. |
+| `js/sound.js` | Mõ, chuông, khánh, phát file ghi âm. |
+| `js/microphone.js` | Mở micro, đo độ to của tiếng (không ghi âm). |
+| `js/voice.js` | Từ độ to, đoán lúc có tiếng và đếm ra số câu. |
 | `js/device.js` | Rung, giữ sáng màn hình. |
 | `js/reminders.js` | Nhắc giờ thời khóa. |
-| `js/controls.js` | Bộ nút chỉnh mõ, hẹn giờ dùng ở nhiều màn hình. |
+| `js/controls.js` | Bộ nút chỉnh mõ, khánh, cách đếm, hẹn giờ dùng ở nhiều màn hình. |
 | `js/content.js` | Đọc nội dung từ các file JSON. |
 | `js/verses.js` | Hiển thị bài kệ và nhãn CẦN THẨM ĐỊNH. |
 | `content/verses.json` | Tán Phật kệ, Hồi hướng. |
@@ -96,7 +98,19 @@ Vài quy tắc:
 - **`deviceId`** không đi theo file sao lưu như là mã của máy mới; mỗi máy giữ mã riêng.
 - Đổi cấu trúc dữ liệu: tăng `SCHEMA_VERSION` và thêm một bước vào `MIGRATIONS` trong `storage.js`.
 
-## 4. Các bước dự kiến khi lên bản online
+## 4. Các cách đếm câu niệm
+
+Cài đặt `countMode` có ba giá trị. Cách nào thì chạm vòng tròn vẫn cộng thêm một câu.
+
+- `touch`: người dùng tự chạm.
+- `woodfish`: cứ `beatsPerPhrase` tiếng mõ (app gõ hoặc người dùng gõ) thì tính một câu.
+- `voice`: nghe micro. App chỉ đo độ to, không hiểu lời. Chưa đo nhịp thì mỗi hơi niệm tính một câu;
+  đã đo nhịp (`voicePhraseMs`, riêng từng câu niệm) thì lấy độ dài hơi niệm chia cho độ dài một câu.
+  Micro chỉ chạy trên `localhost` hoặc địa chỉ `https`.
+
+`stopMode`: đủ giờ, đủ câu thì app tự kết thúc (`auto`) hay chỉ đánh chuông (`self`).
+
+## 5. Các bước dự kiến khi lên bản online
 
 1. Chọn máy chủ (Supabase hoặc Firebase), điền `API_URL` trong `config.js`.
 2. Nới dòng `Content-Security-Policy` trong `index.html` cho đúng địa chỉ máy chủ đó.

@@ -8,13 +8,33 @@ import { getVerse, getRecordings } from './content.js';
 import { createPractice } from './practice.js';
 import { unlockSound } from './sound.js';
 import { el, button, pageTitle, card, choiceGroup, toast } from './ui.js';
-import { woodfishControl, timerControl } from './controls.js';
+import { woodfishControl, countControl, timerControl } from './controls.js';
 import { verseView } from './verses.js';
 
 export const showSaveError = (error) => {
   console.error(error);
   toast(S.common.saveFailed);
 };
+
+// Phản ứng ngay khi ngón tay vừa chạm xuống, không đợi nhấc lên.
+// "click" chỉ dùng cho bàn phím và phần mềm đọc màn hình (không có pointerdown đi trước).
+function onPress(node, action) {
+  let isHandled = false;
+  node.addEventListener('pointerdown', (event) => {
+    if (!event.isPrimary || event.button !== 0) return;
+    isHandled = true;
+    action();
+  });
+  node.addEventListener('click', () => {
+    unlockSound(); // iPhone chỉ cho mở tiếng ở sự kiện này
+    if (!isHandled) action();
+    isHandled = false;
+  });
+  node.addEventListener('keydown', (event) => {
+    if (event.repeat && (event.key === ' ' || event.key === 'Enter')) event.preventDefault();
+  });
+  node.addEventListener('contextmenu', (event) => event.preventDefault());
+}
 
 // Dòng "Thời này niệm được ... câu" (không hiện nếu chỉ niệm mà không đếm).
 export function summaryLine(practice) {
@@ -65,20 +85,16 @@ export async function counterView(ctx, practice, { endLabel, onFinish }) {
   const endButton = button(endLabel, { variant: 'primary', onclick: () => practice.finish() });
   const actions = el('div', { class: 'row' }, pauseButton, endButton);
 
-  // --- Chạm: đếm ngay khi ngón tay vừa chạm xuống, không đợi nhấc lên.
-  // "click" chỉ dùng cho phần mềm đọc màn hình (không có pointerdown đi trước).
-  let countedByPointer = false;
-  bead.addEventListener('pointerdown', (event) => {
-    if (!event.isPrimary || event.button !== 0) return;
-    countedByPointer = true;
-    practice.tap();
-  });
-  bead.addEventListener('click', () => {
-    unlockSound(); // iPhone chỉ cho mở tiếng ở sự kiện này
-    if (!countedByPointer) practice.tap();
-    countedByPointer = false;
-  });
-  bead.addEventListener('contextmenu', (event) => event.preventDefault());
+  onPress(bead, () => practice.tap());
+
+  // --- Tự gõ mõ, gõ khánh; bớt câu; dòng báo của micro
+  const knockButton = button(T.knock, { class: 'btn btn-secondary btn-strike' });
+  onPress(knockButton, () => practice.knock());
+  const chimeButton = button(T.chime, { class: 'btn btn-secondary btn-strike' });
+  onPress(chimeButton, () => practice.chime());
+  const strikes = el('div', { class: 'row' }, knockButton, chimeButton);
+  const undoButton = button(T.undo, { onclick: () => practice.undo() });
+  const micLine = el('p', { class: 'center' });
 
   // --- Bàn phím: Space/Enter đếm, trừ khi đang đứng ở một nút hay ô nhập khác.
   const isCountKey = (event) => {
@@ -104,7 +120,14 @@ export async function counterView(ctx, practice, { endLabel, onFinish }) {
     const { state, count } = practice;
     phrase.textContent = S.phrases[practice.phrase];
     number.textContent = S.common.number(count);
-    hint.textContent = T.hints[state] ?? '';
+    const settings = ctx.getSettings();
+    hint.textContent = (state === 'running' && T.runningHints[settings.countMode]) || T.hints[state] || '';
+    knockButton.hidden = !settings.handWoodfish;
+    chimeButton.hidden = !settings.handChime;
+    strikes.hidden = knockButton.hidden && chimeButton.hidden;
+    undoButton.hidden = count === 0;
+    micLine.textContent = T.micStatus[practice.micStatus];
+    micLine.hidden = practice.micStatus === 'off';
     bead.setAttribute('aria-label', T.beadLabel(S.phrases[practice.phrase], count));
     bead.style.setProperty('--progress', `${((count % BEADS_PER_ROUND) / BEADS_PER_ROUND) * 360}deg`);
     bead.classList.toggle('running', state === 'running');
@@ -116,9 +139,9 @@ export async function counterView(ctx, practice, { endLabel, onFinish }) {
     roundValue.textContent = T.rounds(Math.floor(count / BEADS_PER_ROUND), count % BEADS_PER_ROUND);
 
     const remaining = practice.remainingSec();
-    clock.textContent = remaining === null
-      ? T.elapsed(formatClock(practice.elapsedSec()))
-      : T.remaining(formatClock(remaining));
+    const elapsed = formatClock(practice.elapsedSec());
+    if (practice.goalReached) clock.textContent = T.goalReached(elapsed);
+    else clock.textContent = remaining === null ? T.elapsed(elapsed) : T.remaining(formatClock(remaining));
     actions.hidden = state === 'idle';
     pauseButton.textContent = state === 'running' ? T.pause : T.resume;
   };
@@ -129,17 +152,23 @@ export async function counterView(ctx, practice, { endLabel, onFinish }) {
     else update();
   });
 
+  const removeSettingsListener = ctx.onSettingsChange(update);
+
   return {
     node: el('div', { class: 'counter' },
       bead,
       clock,
+      micLine,
+      strikes,
       actions,
       el('dl', { class: 'stats' },
         stat(T.sessionCount, sessionValue),
         stat(T.todayCount, todayValue),
-        stat(T.roundCount, roundValue))),
+        stat(T.roundCount, roundValue)),
+      undoButton),
     cleanup() {
       removeListener();
+      removeSettingsListener();
       document.removeEventListener('keydown', onKeyDown);
       document.removeEventListener('keyup', onKeyUp);
       practice.pause();
@@ -219,7 +248,8 @@ export async function renderCounter(page, ctx) {
   });
   const woodfish = woodfishControl(ctx);
   const timer = timerControl(ctx, (minutes) => practice.setTimer(minutes));
-  const parts = [counter, woodfish, timer];
+  const counting = countControl(ctx, practice);
+  const parts = [counter, woodfish, counting, timer];
 
   // Chỉ chọn câu niệm khi chưa bắt đầu.
   const phraseCard = card(T.phraseTitle, choiceGroup({
@@ -238,6 +268,7 @@ export async function renderCounter(page, ctx) {
     pageTitle(T.title),
     counter.node,
     card(T.woodfishTitle, woodfish.node),
+    card(T.countTitle, counting.node),
     card(T.timerTitle, timer.node),
     phraseCard);
   if (recording) page.append(card(T.recordingTitle, recording));
