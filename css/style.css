@@ -219,7 +219,7 @@ button, .btn, .choice, .menu-link, .nav-item, .header-btn { user-select: none; -
 
 .solar-date { font-size: 1.15rem; margin: 0; }
 .solar-date, .lunar-date, .notice p { text-wrap: balance; }
-.lunar-date { margin: 0.2rem 0 0; color: var(--muted); }
+.lunar-date { margin: 0.2rem 0 0; font-weight: 600; }
 
 /* Báo nhẹ ngày trai, ngày vía. */
 .notice {
@@ -494,9 +494,10 @@ button, .btn, .choice, .menu-link, .nav-item, .header-btn { user-select: none; -
 .day-dot { width: 8px; height: 8px; flex: none; border-radius: 50%; }
 .day-dot.on { background: var(--primary); }
 .day.holiday { background-color: var(--highlight); }
+.day.special .day-lunar { color: var(--text); font-weight: 700; } /* Ngày trai, ngày vía là theo ngày âm */
 .day.today { border-color: var(--primary); }
 .day.selected { border-color: var(--primary); background: var(--primary); color: var(--on-primary); }
-.day.selected .day-lunar { color: inherit; }
+.day.selected .day-lunar { color: var(--on-primary); }
 .day.selected .day-dot.on { background: var(--on-primary); }
 
 .legend { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 24px; }

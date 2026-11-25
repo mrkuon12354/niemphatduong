@@ -14,6 +14,9 @@ function lunarDay({ day }) {
   if (day === 15) return 'rằm';
   return day <= 10 ? `mùng ${day}` : `ngày ${day}`;
 }
+// Có chữ "âm lịch" để không lẫn với ngày dương. "Rằm" thì vốn đã là ngày âm.
+const lunarDayFull = (lunar) => (lunar.day === 15 ? 'rằm' : `${lunarDay(lunar)} âm lịch`);
+const lunarShort = ({ day, month }) => `${day}/${month} âm lịch`;
 const lunarMonth = ({ month, isLeap }) => `tháng ${month}${isLeap ? ' nhuận' : ''}`;
 const lunarYear = ({ year }) => `${CAN[(year + 6) % 10]} ${CHI[(year + 8) % 12]}`;
 
@@ -71,8 +74,8 @@ export const S = {
     countLabel: 'Số câu đã niệm hôm nay',
     countUnit: 'câu',
     start: 'Bắt đầu niệm Phật',
-    fasting: (lunar) => `Hôm nay ${lunarDay(lunar)} — ngày trai.`,
-    holiday: (title) => `Hôm nay: ${title}.`,
+    fasting: (lunar) => `Hôm nay ${lunarDayFull(lunar)} — ngày trai.`,
+    holiday: (title, lunar) => `Hôm nay ${lunarShort(lunar)}: ${title}.`,
     quoteTitle: 'Lời nhắc mỗi ngày',
   },
 
@@ -203,12 +206,13 @@ export const S = {
     dayLabel: (d, { lunar, isFasting, holidays }) =>
       [`Ngày ${d.getDate()}`, `âm lịch ${lunarDay(lunar)} ${lunarMonth(lunar)}`,
         isFasting ? 'ngày trai' : '', ...holidays.map((h) => h.title)].filter(Boolean).join(', '),
-    fasting: 'Ngày trai',
+    fasting: (lunar) => `Ngày trai (${lunarDayFull(lunar)})`,
+    holiday: (title, lunar) => `${title} (${lunarShort(lunar)})`,
     ordinary: 'Ngày thường.',
     count: (n) => `Số câu niệm của tôi: ${n} câu`,
     legendFasting: 'Ngày trai',
     legendHoliday: 'Ngày vía',
-    reviewNote: 'Danh sách ngày trai và ngày vía cần được thẩm định lại.',
+    reviewNote: 'Ngày trai và ngày vía đều tính theo âm lịch Việt Nam. Danh sách ngày trai và ngày vía cần được thẩm định lại.',
   },
 
   settings: {

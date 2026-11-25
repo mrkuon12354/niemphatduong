@@ -43,7 +43,7 @@ function dayNotice({ lunar, isFasting, holidays }) {
   return [
     el('div', { class: 'notice' },
       isFasting ? el('p', {}, S.today.fasting(lunar)) : null,
-      holidays.map((holiday) => el('p', {}, S.today.holiday(holiday.title))),
+      holidays.map((holiday) => el('p', {}, S.today.holiday(holiday.title, lunar))),
       holidays.length > 0 ? reviewLabel(holidays[0]) : null),
   ];
 }

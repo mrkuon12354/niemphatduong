@@ -64,6 +64,7 @@ export async function renderCalendar(page, ctx) {
     const day = describeDay(date);
     const { lunar, isFasting, holidays } = day;
     const classes = ['day'];
+    if (isFasting || holidays.length > 0) classes.push('special');
     if (holidays.length > 0) classes.push('holiday');
     if (key === todayKey) classes.push('today');
     if (key === selectedKey) classes.push('selected');
@@ -92,9 +93,9 @@ export async function renderCalendar(page, ctx) {
     const { lunar, isFasting, holidays } = describeDay(selected);
     details.replaceChildren(
       el('h2', { class: 'card-title' }, T.dayTitle(selected)),
-      el('p', {}, S.lunar.fullDate(lunar)),
-      isFasting ? el('p', { class: 'day-fact' }, T.fasting) : '',
-      ...holidays.map((holiday) => el('p', { class: 'day-fact' }, holiday.title)),
+      el('p', { class: 'day-fact' }, S.lunar.fullDate(lunar)),
+      isFasting ? el('p', { class: 'day-fact' }, T.fasting(lunar)) : '',
+      ...holidays.map((holiday) => el('p', { class: 'day-fact' }, T.holiday(holiday.title, lunar))),
       holidays.length > 0 ? reviewLabel(holidays[0]) ?? '' : '',
       !isFasting && holidays.length === 0 ? el('p', {}, T.ordinary) : '',
       // Ngày chưa tới thì chưa có số câu.
