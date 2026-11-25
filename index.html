@@ -14,6 +14,7 @@
   <title>Niệm Phật Đường</title>
   <!-- Biểu tượng thật sẽ thêm ở Giai đoạn E. -->
   <link rel="icon" href="data:,">
+  <script src="js/boot.js"></script>
   <link rel="stylesheet" href="css/style.css">
   <!-- Tải các file cùng lúc thay vì lần lượt, để app mở nhanh hơn. Thêm file js mới thì thêm vào đây. -->
   <link rel="modulepreload" href="js/config.js">
@@ -46,7 +47,12 @@
   <!-- js/app.js dựng toàn bộ giao diện vào đây. Dòng chữ bên trong chỉ hiện
        nếu sau 3 giây app vẫn chưa chạy (ví dụ mở thẳng file bằng cách bấm đúp). -->
   <div id="app">
-    <p class="boot-message">Đang mở app… Nếu màn hình này không đổi, xin xem cách chạy trong file README.md.</p>
+    <!-- Khung trống, cao bằng thanh trên và thanh dưới thật, để lúc app hiện ra không bị nhảy. -->
+    <div class="app-header"><div class="app-header-inner"></div></div>
+    <div class="app-main">
+      <p class="boot-message">Đang mở app… Nếu màn hình này không đổi, xin xem cách chạy trong file README.md.</p>
+    </div>
+    <div class="app-nav" aria-hidden="true"><span class="nav-item nav-blank"><span class="icon"></span><span class="nav-label">Niệm Phật</span></span></div>
   </div>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
   <noscript>Trình duyệt đang tắt JavaScript nên app không chạy được.</noscript>

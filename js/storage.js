@@ -1,5 +1,6 @@
 // storage.js — LỚP LƯU TRỮ. Mọi việc đọc/ghi dữ liệu đều phải đi qua file này.
-// Không file nào khác được gọi trực tiếp IndexedDB hay localStorage.
+// Không file nào khác được gọi trực tiếp IndexedDB hay localStorage
+// (riêng boot.js được đọc một bản sao nhỏ của màu nền và cỡ chữ).
 //
 // Bên trong có 3 "kho", thử lần lượt từ trên xuống:
 //   1. IndexedDB    — kho chính, chứa được nhiều.
@@ -264,7 +265,18 @@ function cleanSettings(values = {}) {
 
 export async function getSettings() {
   const db = await initStorage();
-  return cleanSettings((await db.get('kv', 'settings'))?.values);
+  const values = cleanSettings((await db.get('kv', 'settings'))?.values);
+  rememberLook(values);
+  return values;
+}
+
+// Chép màu nền và cỡ chữ sang chỗ đọc được ngay, cho boot.js dùng lúc mở trang.
+function rememberLook({ theme, fontSize }) {
+  try {
+    localStorage.setItem(`${APP_ID}:look`, JSON.stringify({ theme, fontSize }));
+  } catch {
+    // Không ghi được thì lúc mở trang có thể chớp sáng một chút, không sao.
+  }
 }
 
 // Các việc "đọc rồi ghi lại" phải xếp hàng, để hai lần bấm nhanh không đè mất nhau.
@@ -286,6 +298,7 @@ export function saveSettings(patch) {
       store: 'kv',
       put: { id: 'settings', values, createdAt: old?.createdAt ?? now, updatedAt: now },
     }]);
+    rememberLook(values);
     return values;
   });
 }

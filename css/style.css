@@ -38,6 +38,7 @@
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
 html {
+  background: var(--bg);
   font-size: 20px;
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
@@ -565,6 +566,9 @@ h2.sub-title { margin-top: 8px; font-size: 1.1rem; font-weight: 700; line-height
 }
 .dialog::backdrop { background: rgb(0 0 0 / 0.55); }
 .dialog .stack { margin-top: 1rem; }
+
+/* Khung trống lúc app đang mở. */
+.nav-blank { visibility: hidden; }
 
 /* Dòng chờ khi app chưa chạy: 3 giây sau mới hiện. */
 .boot-message {

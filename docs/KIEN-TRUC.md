@@ -16,6 +16,7 @@ Hiện đã xong **Giai đoạn A** (khung app), **B** (Niệm Phật, Thời kh
 | `js/storage.js` | Lớp lưu trữ. **Chỉ file này** được đọc/ghi dữ liệu trên máy. |
 | `js/dates.js` | Hàm xử lý ngày giờ. |
 | `js/ui.js` | Nút, thẻ, hộp hỏi, biểu tượng dùng chung. |
+| `js/boot.js` | Đặt màu nền, cỡ chữ ngay khi mở trang để không bị chớp sáng. |
 | `js/app.js` | Khởi động app và chuyển màn hình. |
 | `js/today.js` | Màn hình Hôm nay. |
 | `js/practice.js` | "Bộ máy" một thời niệm: đếm, tính giờ, lưu dần. Không vẽ giao diện. |
