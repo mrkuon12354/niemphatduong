@@ -1,7 +1,8 @@
 # Kiến trúc app Niệm Phật Đường
 
 Tài liệu này dành cho người mới học lập trình. Nó được cập nhật sau mỗi giai đoạn.
-Hiện đã xong **Giai đoạn A** (khung app), **B** (Niệm Phật, Thời khóa) và **C** (âm lịch, Lịch tháng, Hôm nay).
+Hiện đã xong **Giai đoạn A** (khung app), **B** (Niệm Phật, Thời khóa),
+**C** (âm lịch, Lịch tháng, Hôm nay) và **D** (Bài học).
 
 ## 1. Cấu trúc thư mục
 
@@ -37,11 +38,12 @@ Hiện đã xong **Giai đoạn A** (khung app), **B** (Niệm Phật, Thời kh
 | `content/holidays.json` | Ngày trai và ngày vía. Cần thẩm định lại. |
 | `content/quotes.json` | Câu nhắc mỗi ngày (câu mẫu, chờ thay). |
 | `js/calendar.js` | Màn hình Lịch tháng. |
-| `js/lessons.js` | Màn hình Bài học (Giai đoạn D). |
+| `js/lessons.js` | Màn hình Bài học: danh sách bài và trang đọc một bài. |
+| `content/lessons.json` | 10 bài học (bản nháp). |
 | `js/settings.js` | Cài đặt: trang mục lục và bốn trang con. Mọi lựa chọn nằm ở đây. |
 | `js/info.js` | Trang Giới thiệu và Chính sách riêng tư. |
 
-Sẽ thêm ở giai đoạn sau: `content/lessons.json`, `icons/`, `manifest.json`, `sw.js`.
+Sẽ thêm ở giai đoạn sau: `icons/`, `manifest.json`, `sw.js`.
 
 Mỗi mục nội dung có `id`, `version`, `status` và `source`. Khi `status` là `"draft"`, app hiện nhãn
 CẦN THẨM ĐỊNH. Thẩm định xong thì đổi thành `"reviewed"` và ghi nguồn vào `source`.
@@ -60,7 +62,8 @@ JavaScript chưa chạy được), vì lúc đó app chưa đọc được file 
    - Hàm có thể trả về một "hàm dọn dẹp", được gọi khi rời màn hình.
 
 Muốn thêm một màn hình: viết hàm vẽ, thêm một dòng vào bảng `ROUTES` trong `app.js`.
-Trang con thì thêm `parent`: thanh trên sẽ có nút quay lại.
+Trang con thì thêm `parent`: thanh trên sẽ có nút quay lại. Địa chỉ có phần đuôi (như
+`#/hoc/hoi-huong`) thì thêm `hasParam`; hàm vẽ nhận phần đuôi ở tham số thứ ba.
 
 Thanh trên và thanh dưới đứng yên, chỉ phần giữa (`<main>`) cuộn. Tiêu đề ở thanh trên được chép từ
 thẻ `h1` của trang (hàm `pageTitle()`), nên trang nào cũng phải có `pageTitle()`.
@@ -77,7 +80,7 @@ Các file khác không cần biết đang dùng kho nào.
 |---|---|
 | `kv` | Bản ghi `meta` (`schemaVersion`, `deviceId`) và bản ghi `settings`. |
 | `sessions` | Mỗi thời niệm là một bản ghi. |
-| `lessonProgress` | Bài đã học (dùng từ Giai đoạn D). |
+| `lessonProgress` | Bài đã học. `id` của bản ghi chính là id bài học. |
 
 Một thời niệm:
 
@@ -135,7 +138,18 @@ Hai tiếng mõ cách nhau `secondsPerPhrase / beatsPerPhrase` giây.
 - Câu nhắc mỗi ngày lấy lần lượt trong `quotes.json`. Khi thay bằng lời trích đúng nguồn: sửa `text`,
   ghi nguồn vào `source` (app sẽ hiện nguồn), đổi `status` thành `"reviewed"`.
 
-## 6. Các bước dự kiến khi lên bản online
+## 6. Bài học
+
+Mỗi bài trong `lessons.json` có `order` (thứ tự), `title` và `blocks` (các đoạn). Các loại đoạn:
+
+- `text`: đoạn văn; `heading`: tiêu đề nhỏ; `list`: các dòng trong `items`.
+- `quote`: lời trích. `text` trống thì app hiện "[cần trích nguyên văn từ giảng ký]". Khi có lời trích
+  đúng nguồn: điền `text` và `source`.
+
+Duyệt xong một bài thì đổi `status` thành `"reviewed"`, nhãn BẢN NHÁP sẽ mất. Đừng đổi `id` của bài,
+vì phần "Đã học" của người dùng dựa vào đó.
+
+## 7. Các bước dự kiến khi lên bản online
 
 1. Chọn máy chủ (Supabase hoặc Firebase), điền `API_URL` trong `config.js`.
 2. Nới dòng `Content-Security-Policy` trong `index.html` cho đúng địa chỉ máy chủ đó.

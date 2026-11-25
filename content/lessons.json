@@ -1,0 +1,803 @@
+{
+  "items": [
+    {
+      "id": "niem-phat-la-gi",
+      "version": 1,
+      "status": "draft",
+      "source": "",
+      "order": 1,
+      "title": "Niệm Phật là gì? Tín – Nguyện – Hạnh",
+      "blocks": [
+        {
+          "type": "text",
+          "text": "Niệm Phật là nhớ nghĩ đến Phật. Trong chữ Hán, chữ “niệm” (念) gồm chữ “kim” là hiện nay ở trên và chữ “tâm” ở dưới. Có thể hiểu nôm na: ngay lúc này, trong tâm đang có Phật. Miệng đọc mà tâm nghĩ việc khác thì chưa trọn; tâm nhớ Phật, miệng xưng danh hiệu, tai nghe lại tiếng mình, như thế mới gọi là niệm."
+        },
+        {
+          "type": "text",
+          "text": "Pháp môn Tịnh độ lấy câu “Nam Mô A Di Đà Phật” làm chỗ nương. “Nam Mô” là quy y, nương về. “A Di Đà” là danh hiệu của đức Phật ở thế giới Cực Lạc, có nghĩa là vô lượng quang và vô lượng thọ: ánh sáng không cùng, thọ mạng không cùng."
+        },
+        {
+          "type": "heading",
+          "text": "Ba điều cần có"
+        },
+        {
+          "type": "text",
+          "text": "Người tu Tịnh độ thường nhắc đến ba điều, ví như ba chân của một cái đỉnh. Thiếu một chân thì đỉnh không đứng vững."
+        },
+        {
+          "type": "list",
+          "items": [
+            "Tín là tin. Tin có thế giới Cực Lạc, tin có Phật A Di Đà, tin lời Phật dạy là chân thật, và tin rằng mình niệm Phật cũng được Phật tiếp dẫn.",
+            "Nguyện là mong muốn chân thành. Nguyện được sanh về Cực Lạc, học với Phật, rồi trở lại giúp đỡ mọi người.",
+            "Hạnh là thực hành. Mỗi ngày đều niệm Phật, và sống sao cho xứng với câu Phật hiệu mình niệm."
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Tin mà không nguyện thì như biết có con đường nhưng không muốn đi. Nguyện mà không hành thì như muốn đi nhưng vẫn ngồi yên. Hành mà thiếu tín, nguyện thì dễ mỏi, gặp khó là bỏ."
+        },
+        {
+          "type": "quote",
+          "text": "",
+          "source": "",
+          "topic": "Tín – Nguyện – Hạnh"
+        },
+        {
+          "type": "heading",
+          "text": "Ai cũng niệm được"
+        },
+        {
+          "type": "text",
+          "text": "Niệm Phật không đòi hỏi học rộng, không cần nơi chốn sang trọng. Người già, người trẻ, người bận rộn, người đau yếu đều niệm được. Đi, đứng, nằm, ngồi đều niệm được. Ở nơi trang nghiêm thì niệm ra tiếng; ở chỗ không tiện, hoặc khi nằm nghỉ, thì niệm thầm trong tâm."
+        },
+        {
+          "type": "text",
+          "text": "Mới bắt đầu, tâm nghĩ lung tung là chuyện thường. Không cần buồn, cũng không cần cố đè nén. Nhận ra mình đang nghĩ việc khác thì nhẹ nhàng trở về với câu Phật hiệu. Mỗi lần trở về là một lần nhớ Phật."
+        },
+        {
+          "type": "heading",
+          "text": "Việc nhỏ hôm nay"
+        },
+        {
+          "type": "text",
+          "text": "Ngồi yên, thở đều, chắp tay, rồi niệm mười câu “Nam Mô A Di Đà Phật” thật chậm. Niệm câu nào nghe rõ câu ấy. Xong thì tự hỏi: mình niệm Phật vì điều gì? Câu trả lời thành thật của quý vị chính là chỗ khởi đầu của chữ Nguyện."
+        }
+      ]
+    },
+    {
+      "id": "cach-niem",
+      "version": 1,
+      "status": "draft",
+      "source": "",
+      "order": 2,
+      "title": "Cách niệm: ra tiếng, niệm thầm và Thập niệm pháp",
+      "blocks": [
+        {
+          "type": "text",
+          "text": "Có nhiều cách niệm Phật. Không cách nào hơn cách nào cho mọi người; cách hợp với mình, giữ được lâu dài, là cách tốt. Bài này giới thiệu vài cách thông dụng để quý vị chọn."
+        },
+        {
+          "type": "heading",
+          "text": "Niệm ra tiếng"
+        },
+        {
+          "type": "text",
+          "text": "Niệm thành tiếng, to hoặc vừa, giúp tâm bớt tán loạn và đỡ buồn ngủ. Không cần gắng sức, vì cố quá thì mệt hơi, khô cổ. Niệm vừa đủ để tai mình nghe rõ là được. Ở nhà có người ngủ hoặc người bệnh, nên niệm nhỏ lại."
+        },
+        {
+          "type": "heading",
+          "text": "Niệm thầm"
+        },
+        {
+          "type": "text",
+          "text": "Niệm trong tâm, môi không động hoặc chỉ động nhẹ. Cách này hợp khi đi xe, khi chờ đợi, khi nằm nghỉ, hay khi ở nơi không tiện phát ra tiếng. Dù niệm thầm, vẫn nên nghe rõ từng chữ trong tâm."
+        },
+        {
+          "type": "heading",
+          "text": "Nghe rõ từng chữ"
+        },
+        {
+          "type": "text",
+          "text": "Dù niệm cách nào, điều quan trọng là rõ ràng: tâm khởi lên rõ, miệng niệm rõ, tai nghe rõ. Sáu chữ “Nam Mô A Di Đà Phật” hoặc bốn chữ “A Di Đà Phật”, chữ nào cũng phân minh, không lướt qua, không nuốt chữ. Niệm nhanh hay chậm tùy mỗi người, miễn là không mất chữ."
+        },
+        {
+          "type": "text",
+          "text": "Khi tâm chạy đi nơi khác, tai sẽ không còn nghe thấy tiếng niệm nữa. Nhận ra như vậy thì lắng tai trở lại. Cứ thế, việc lắng nghe trở thành sợi dây nhẹ nhàng giữ tâm ở lại với câu Phật hiệu."
+        },
+        {
+          "type": "quote",
+          "text": "",
+          "source": "",
+          "topic": "cách niệm rõ ràng, lắng nghe từng chữ"
+        },
+        {
+          "type": "heading",
+          "text": "Thập niệm pháp"
+        },
+        {
+          "type": "text",
+          "text": "Thập niệm là mười niệm: mỗi lần niệm liền mười câu Phật hiệu. Cách này hợp với người bận rộn, vì mỗi lần chỉ mất chừng một phút. Trong ngày có thể niệm chín lần: lúc thức dậy, trước ba bữa ăn, khi bắt đầu và kết thúc công việc buổi sáng, buổi chiều, và trước khi ngủ."
+        },
+        {
+          "type": "text",
+          "text": "Lợi ích của cách này là đều đặn. Cứ cách vài giờ, tâm lại được nhắc nhớ một lần. Trong mục Thời khóa của app có trang Thập niệm pháp để quý vị chạm đánh dấu mỗi lần niệm xong. Lỡ quên một lần thì niệm tiếp lần sau, không cần bù, không cần tự trách."
+        },
+        {
+          "type": "quote",
+          "text": "",
+          "source": "",
+          "topic": "Thập niệm pháp"
+        },
+        {
+          "type": "heading",
+          "text": "Có cần đếm không?"
+        },
+        {
+          "type": "text",
+          "text": "Đếm giúp mình biết hôm nay đã niệm chưa và niệm được bao nhiêu, nhưng số câu không phải để khoe hay hơn thua. Nếu việc đếm làm tâm thêm bận, quý vị cứ niệm mà không đếm."
+        },
+        {
+          "type": "heading",
+          "text": "Việc nhỏ hôm nay"
+        },
+        {
+          "type": "text",
+          "text": "Thử hai cách: buổi sáng niệm ra tiếng mười câu, buổi tối trước khi ngủ niệm thầm mười câu. Xem cách nào giúp mình nghe rõ từng chữ hơn."
+        }
+      ]
+    },
+    {
+      "id": "lap-thoi-khoa",
+      "version": 1,
+      "status": "draft",
+      "source": "",
+      "order": 3,
+      "title": "Lập thời khóa nhỏ giữ được lâu dài",
+      "blocks": [
+        {
+          "type": "text",
+          "text": "Nhiều người mới tu rất hăng hái: ngày đầu niệm thật nhiều, tuần sau thấy mệt, tháng sau thì bỏ. Không phải vì thiếu lòng, mà vì đặt ra thời khóa lớn hơn sức mình. Bài này nói về cách lập một thời khóa nhỏ, giữ được lâu."
+        },
+        {
+          "type": "heading",
+          "text": "Nhất môn thâm nhập"
+        },
+        {
+          "type": "text",
+          "text": "Nhất môn thâm nhập nghĩa là đi sâu vào một môn. Giống như đào giếng: đào một chỗ cho sâu thì gặp nước; mỗi nơi đào một ít thì tốn công mà vẫn khô. Chọn một bộ kinh, một câu Phật hiệu, rồi chuyên tâm với điều mình đã chọn."
+        },
+        {
+          "type": "text",
+          "text": "Đi sâu một môn không có nghĩa là xem nhẹ các môn khác. Mỗi pháp môn đều có người hợp với pháp ấy. Mình chọn một con đường để đi cho tới nơi, đồng thời tôn trọng con đường của người khác."
+        },
+        {
+          "type": "heading",
+          "text": "Trường thời huân tu"
+        },
+        {
+          "type": "text",
+          "text": "Trường thời là thời gian dài. Huân là ướp, như ướp trà với hoa: hương thấm dần, không thấy ngay nhưng lâu ngày thì trà thơm. Tu học cũng vậy. Mỗi ngày một ít, đều đặn nhiều năm, thói quen của tâm sẽ từ từ thay đổi."
+        },
+        {
+          "type": "quote",
+          "text": "",
+          "source": "",
+          "topic": "nhất môn thâm nhập, trường thời huân tu"
+        },
+        {
+          "type": "heading",
+          "text": "Cách lập thời khóa"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Chọn giờ cố định. Sáng sau khi rửa mặt và tối trước khi ngủ thường dễ giữ nhất.",
+            "Bắt đầu thật nhỏ. Mỗi thời năm hoặc mười phút là đủ. Thà ít mà ngày nào cũng có.",
+            "Chọn một chỗ sạch sẽ, yên tĩnh. Có bàn thờ Phật thì tốt, không có thì một góc nhà gọn gàng cũng được.",
+            "Giữ ít nhất vài tuần rồi mới tăng. Khi thấy thời khóa đã thành nếp, không còn phải gắng, hãy thêm một chút."
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Một thời khóa đơn giản gồm ba phần: mở đầu bằng bài tán Phật hoặc ba lạy, phần chính là niệm Phật, kết thúc bằng hồi hướng. Mục Thời khóa trong app sắp sẵn các bước này để quý vị làm theo."
+        },
+        {
+          "type": "heading",
+          "text": "Khi lỡ một ngày"
+        },
+        {
+          "type": "text",
+          "text": "Bệnh, đi xa, việc gấp đều có thể làm mình lỡ thời khóa. Hôm sau cứ làm tiếp như bình thường. Không cần niệm bù cho đủ số, vì bù dồn dễ thành gánh nặng. Nếu cả tuần đều lỡ, có lẽ thời khóa đang quá dài: hãy rút ngắn lại."
+        },
+        {
+          "type": "text",
+          "text": "Những ngày quá bận, có thể thay cả thời khóa bằng mười câu niệm Phật. Điều đáng giữ nhất là sợi dây liên tục."
+        },
+        {
+          "type": "heading",
+          "text": "Việc nhỏ hôm nay"
+        },
+        {
+          "type": "text",
+          "text": "Chọn một giờ trong ngày mà quý vị chắc chắn rảnh, và một số phút mà quý vị chắc chắn làm được, kể cả hôm mệt. Vào phần Cài đặt thời khóa trong app để đặt số phút ấy."
+        }
+      ]
+    },
+    {
+      "id": "tam-phuoc",
+      "version": 1,
+      "status": "draft",
+      "source": "",
+      "order": 4,
+      "title": "Tam phước — nền tảng",
+      "blocks": [
+        {
+          "type": "text",
+          "text": "Xây nhà phải có móng. Người tu Tịnh độ cũng cần nền móng, và nền móng ấy thường được gọi là Tam phước, tức ba loại phước. Trong khung năm khoa tu học gồm Tam phước, Lục hòa, Tam học, Lục độ và Phổ Hiền thập nguyện, Tam phước đứng đầu tiên. Bài này nói về loại phước thứ nhất, gốc rễ của tất cả, với bốn điều."
+        },
+        {
+          "type": "heading",
+          "text": "Hiếu dưỡng cha mẹ"
+        },
+        {
+          "type": "text",
+          "text": "Hiếu không chỉ là lo cơm áo. Hiếu còn là để cha mẹ được yên lòng: nói lời mềm mỏng, giữ gìn sức khỏe của mình, sống ngay thẳng để cha mẹ không phải lo. Khi cha mẹ già yếu, kiên nhẫn nghe những chuyện đã nghe nhiều lần cũng là hiếu. Cha mẹ đã mất thì sống tốt, làm việc lành, niệm Phật hồi hướng cho cha mẹ."
+        },
+        {
+          "type": "heading",
+          "text": "Phụng sự sư trưởng"
+        },
+        {
+          "type": "text",
+          "text": "Sư trưởng là thầy dạy và những người dẫn dắt mình. Phụng sự không phải chỉ là biếu tặng, mà là trân trọng lời dạy và đem ra thực hành. Học trò làm được điều thầy dạy, đó là sự báo đáp lớn nhất."
+        },
+        {
+          "type": "quote",
+          "text": "",
+          "source": "",
+          "topic": "hiếu thân, tôn sư"
+        },
+        {
+          "type": "heading",
+          "text": "Từ tâm không sát"
+        },
+        {
+          "type": "text",
+          "text": "Từ tâm là lòng thương. Từ lòng thương ấy mà không giết hại. Loài vật cũng biết đau, biết sợ, biết quyến luyến. Trong đời sống hằng ngày, có thể bắt đầu bằng việc không giết để vui chơi, dời con vật nhỏ ra ngoài thay vì giết, và bớt dần thịt cá tùy sức mình."
+        },
+        {
+          "type": "heading",
+          "text": "Tu thập thiện nghiệp"
+        },
+        {
+          "type": "text",
+          "text": "Mười điều lành chia theo thân, miệng và ý:"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Thân có ba: không sát sanh, không trộm cắp, không tà dâm.",
+            "Miệng có bốn: không nói dối, không nói lời chia rẽ, không nói lời thô ác, không nói lời thêu dệt.",
+            "Ý có ba: không tham lam, không sân hận, không si mê."
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Đọc qua thì dễ, làm được thì cần cả đời. Không cần ép mình giữ trọn mười điều ngay. Chọn một điều mình hay phạm nhất, để tâm đến nó trong một tháng, rồi sang điều khác."
+        },
+        {
+          "type": "quote",
+          "text": "",
+          "source": "",
+          "topic": "Tam phước là nền tảng của người niệm Phật"
+        },
+        {
+          "type": "heading",
+          "text": "Vì sao cần nền tảng này?"
+        },
+        {
+          "type": "text",
+          "text": "Có thể xem mỗi lời nói, việc làm trong ngày là phần nối dài của thời khóa. Thời khóa sáng nhắc mình sống hiền hòa; cách sống trong ngày làm cho câu Phật hiệu buổi tối được yên hơn. Nếu vừa niệm Phật xong đã nặng lời với người nhà, tâm khó mà an."
+        },
+        {
+          "type": "heading",
+          "text": "Việc nhỏ hôm nay"
+        },
+        {
+          "type": "text",
+          "text": "Gọi điện hỏi thăm cha mẹ, hoặc làm một việc giúp người lớn tuổi trong nhà. Nếu cha mẹ đã mất, dành mười câu niệm Phật hôm nay hồi hướng cho cha mẹ."
+        }
+      ]
+    },
+    {
+      "id": "tam-can-ban",
+      "version": 1,
+      "status": "draft",
+      "source": "",
+      "order": 5,
+      "title": "Tam căn bản: Đệ Tử Quy, Cảm Ứng Thiên, Thập Thiện Nghiệp Đạo",
+      "blocks": [
+        {
+          "type": "text",
+          "text": "Bài trước nói về Tam phước. Muốn thực hiện được, cần có chỗ để học và soi mình. Ba quyển thường được giới thiệu làm căn bản là Đệ Tử Quy, Cảm Ứng Thiên và Thập Thiện Nghiệp Đạo Kinh. Bài này chỉ giới thiệu sơ lược để quý vị biết mỗi quyển nói về điều gì. Phần nguyên văn và lời giảng, xin tìm đọc ở phần Đọc thêm."
+        },
+        {
+          "type": "heading",
+          "text": "Đệ Tử Quy"
+        },
+        {
+          "type": "text",
+          "text": "Đây là quyển sách ngắn của nhà Nho, dạy phép tắc làm con, làm em, làm học trò. Nội dung rất gần gũi: cha mẹ gọi thì thưa ngay, ra khỏi nhà thì thưa trình, anh em hòa thuận, ăn mặc gọn gàng, lời nói giữ chữ tín, thấy người khác làm tốt thì học theo, gần gũi người hiền, có sức dư thì học chữ nghĩa."
+        },
+        {
+          "type": "text",
+          "text": "Sách viết cho trẻ nhỏ nhưng người lớn đọc vẫn thấy nhiều điều mình chưa làm được. Cả nhà cùng đọc thì tốt hơn chỉ bắt trẻ đọc."
+        },
+        {
+          "type": "heading",
+          "text": "Cảm Ứng Thiên"
+        },
+        {
+          "type": "text",
+          "text": "Quyển này thuộc truyền thống Đạo gia, nói về nhân quả: làm lành gặp lành, làm ác gặp ác, như bóng theo hình. Sách kể ra nhiều việc lành nên làm và việc dữ nên tránh, trong đó có cả những điều rất kín đáo như ý nghĩ ghen ghét, vui khi thấy người gặp nạn."
+        },
+        {
+          "type": "text",
+          "text": "Đọc quyển này giúp mình biết dừng lại trước khi làm điều sai, kể cả khi không ai nhìn thấy. Đọc để soi mình, không phải để xét nét người khác."
+        },
+        {
+          "type": "heading",
+          "text": "Thập Thiện Nghiệp Đạo Kinh"
+        },
+        {
+          "type": "text",
+          "text": "Đây là kinh Phật nói về mười nghiệp lành của thân, miệng và ý mà bài trước đã nhắc tới. Kinh cho thấy mười điều lành là chỗ đứng chung của người tu, như mặt đất nâng đỡ mọi cây cối, nhà cửa."
+        },
+        {
+          "type": "quote",
+          "text": "",
+          "source": "",
+          "topic": "vì sao ba quyển này là căn bản"
+        },
+        {
+          "type": "heading",
+          "text": "Vì sao học sách của Nho và Đạo?"
+        },
+        {
+          "type": "text",
+          "text": "Ba quyển từ ba truyền thống nhưng cùng dạy làm người tốt: giữ bổn phận, biết sợ nhân quả, sống hiền thiện. Biết ơn và tôn trọng điều hay ở mọi nơi cũng là một cách tu tâm khiêm hạ."
+        },
+        {
+          "type": "heading",
+          "text": "Học thế nào cho vừa sức?"
+        },
+        {
+          "type": "text",
+          "text": "Không cần học cả ba quyển cùng lúc. Có thể bắt đầu với Đệ Tử Quy, mỗi ngày đọc vài câu, hiểu nghĩa, rồi chọn một câu để làm trong ngày. Học mà làm được một câu còn hơn thuộc cả quyển mà không làm."
+        },
+        {
+          "type": "heading",
+          "text": "Việc nhỏ hôm nay"
+        },
+        {
+          "type": "text",
+          "text": "Chọn một điều trong bài này mà quý vị thấy mình còn thiếu, ví dụ trả lời ngay khi người nhà gọi. Hôm nay để tâm làm điều ấy, tối đến xem lại mình làm được mấy lần."
+        }
+      ]
+    },
+    {
+      "id": "an-chay-gioi",
+      "version": 1,
+      "status": "draft",
+      "source": "",
+      "order": 6,
+      "title": "Ăn chay, giữ Ngũ giới tùy sức, ngày thập trai",
+      "blocks": [
+        {
+          "type": "text",
+          "text": "Nhiều người ngại bước vào đường tu vì nghĩ phải ăn chay trường ngay, giữ đủ giới luật ngay. Bài này nói về cách đi từng bước, tùy sức, với lòng vui vẻ."
+        },
+        {
+          "type": "heading",
+          "text": "Vì sao ăn chay?"
+        },
+        {
+          "type": "text",
+          "text": "Người học Phật ăn chay trước hết vì lòng thương: không muốn loài vật phải chịu đau đớn vì bữa ăn của mình. Khi ăn với tâm thương như vậy, bữa cơm trở thành một phần của việc tu. Ăn chay không phải để hơn người ăn mặn, cũng không phải để được khen."
+        },
+        {
+          "type": "heading",
+          "text": "Ngày thập trai"
+        },
+        {
+          "type": "text",
+          "text": "Thập trai là mười ngày ăn chay trong tháng âm lịch: mùng 1, mùng 8, ngày 14, rằm, 18, 23, 24, 28, 29 và 30. Tháng thiếu chỉ có 29 ngày thì ba ngày cuối là 27, 28, 29. Trang Lịch tháng trong app có đánh dấu các ngày này bằng chấm tròn."
+        },
+        {
+          "type": "text",
+          "text": "Nếu mười ngày còn nhiều, có thể bắt đầu với hai ngày mùng 1 và rằm, hoặc mỗi ngày một bữa chay. Quen dần rồi tăng thêm."
+        },
+        {
+          "type": "heading",
+          "text": "Giữ sức khỏe và hòa khí"
+        },
+        {
+          "type": "text",
+          "text": "Bữa chay nên đủ chất: đậu, đậu hũ, rau, củ, hạt, trái cây, cơm gạo. Người bệnh, người cao tuổi, phụ nữ mang thai, trẻ nhỏ nên hỏi ý bác sĩ trước khi thay đổi cách ăn."
+        },
+        {
+          "type": "text",
+          "text": "Trong nhà có người ăn mặn thì đừng ép, đừng chê. Nấu một món chay ngon mời cả nhà, đó là cách khuyên dễ nghe nhất. Gia đình hòa thuận cũng là một phần của đạo."
+        },
+        {
+          "type": "heading",
+          "text": "Ngũ giới"
+        },
+        {
+          "type": "text",
+          "text": "Năm giới là năm hàng rào bảo vệ mình và người chung quanh:"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Không sát sanh: tôn trọng sự sống.",
+            "Không trộm cắp: không lấy thứ người ta chưa cho.",
+            "Không tà dâm: chung thủy, giữ hạnh phúc gia đình mình và gia đình người.",
+            "Không vọng ngữ: nói lời chân thật.",
+            "Không uống rượu: giữ đầu óc tỉnh táo để giữ được bốn giới kia."
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Muốn chính thức thọ giới thì cần có thầy truyền giới và lễ nghi đàng hoàng. Chưa thọ giới, quý vị vẫn có thể tập giữ. Giữ được giới nào thì giữ giới ấy; phạm thì biết lỗi, sửa lại, không vì vậy mà bỏ luôn."
+        },
+        {
+          "type": "quote",
+          "text": "",
+          "source": "",
+          "topic": "giữ giới và trai giới của người tại gia"
+        },
+        {
+          "type": "heading",
+          "text": "Ghi nhớ"
+        },
+        {
+          "type": "text",
+          "text": "Giới là để được nhẹ lòng, không phải để sợ hãi. Người giữ giới mà khó chịu với mọi người thì chưa đúng tinh thần. Nghiêm với mình, rộng lượng với người."
+        },
+        {
+          "type": "heading",
+          "text": "Việc nhỏ hôm nay"
+        },
+        {
+          "type": "text",
+          "text": "Mở trang Lịch tháng, xem ngày trai sắp tới là ngày nào. Định trước một món chay đơn giản cho ngày ấy."
+        }
+      ]
+    },
+    {
+      "id": "hoi-huong",
+      "version": 1,
+      "status": "draft",
+      "source": "",
+      "order": 7,
+      "title": "Hồi hướng là gì",
+      "blocks": [
+        {
+          "type": "text",
+          "text": "Cuối mỗi thời khóa đều có phần hồi hướng. Nhiều người đọc theo thói quen mà chưa rõ ý nghĩa. Bài này giải thích ngắn gọn để lần sau đọc, quý vị đọc bằng cả tấm lòng."
+        },
+        {
+          "type": "heading",
+          "text": "Ý nghĩa hai chữ"
+        },
+        {
+          "type": "text",
+          "text": "“Hồi” là quay lại, “hướng” là hướng về. Hồi hướng là đem phần lành mình vừa làm, quay lại và hướng về một nơi nào đó, không giữ riêng cho mình. Giống như ngọn đèn: thắp sáng thêm cho người khác, ánh sáng của mình không hề bớt đi."
+        },
+        {
+          "type": "heading",
+          "text": "Hồi hướng về đâu?"
+        },
+        {
+          "type": "text",
+          "text": "Bài hồi hướng trong app có thể hiểu theo mấy ý sau:"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Hướng về Tịnh độ: nguyện cho phần công đức này làm trang nghiêm cõi Phật, và mình được sanh về đó.",
+            "Hướng lên trên: nhớ ơn và đền ơn. Bốn ơn thường nói là ơn cha mẹ, ơn thầy dạy và Tam bảo, ơn đất nước, ơn mọi người.",
+            "Hướng xuống dưới: thương những loài đang chịu khổ, mong cho họ được nhẹ bớt.",
+            "Hướng đến mọi người: mong ai thấy, ai nghe cũng phát tâm lành và cùng được sanh về Cực Lạc."
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Cách giải thích ở trên là để dễ hiểu. Phần giảng kỹ từng câu, xin xem trong giảng ký."
+        },
+        {
+          "type": "quote",
+          "text": "",
+          "source": "",
+          "topic": "ý nghĩa bài Hồi hướng"
+        },
+        {
+          "type": "heading",
+          "text": "Hồi hướng cho người thân"
+        },
+        {
+          "type": "text",
+          "text": "Quý vị có thể hồi hướng cho cha mẹ, ông bà, người bệnh, người đã mất. Chỉ cần thành tâm nghĩ đến người ấy rồi nói rõ: “Con xin hồi hướng công đức niệm Phật hôm nay cho…”, sau đó đọc bài hồi hướng. Không cần lời lẽ cầu kỳ."
+        },
+        {
+          "type": "text",
+          "text": "Cũng có thể hồi hướng cho người mình đang giận. Đây là việc khó, nhưng mỗi lần làm được, lòng mình nhẹ đi trước tiên."
+        },
+        {
+          "type": "heading",
+          "text": "Vì sao cần hồi hướng?"
+        },
+        {
+          "type": "text",
+          "text": "Làm việc lành mà nghĩ “đây là của tôi” thì tâm dễ nhỏ hẹp và tự cao. Hồi hướng giúp mở rộng tâm, nhớ rằng mình sống được là nhờ bao nhiêu người. Hồi hướng cũng giúp mình nhớ lại nguyện vọng: niệm Phật để sanh về Cực Lạc và giúp đỡ chúng sanh."
+        },
+        {
+          "type": "text",
+          "text": "Số câu niệm nhiều hay ít đều hồi hướng được. Mười câu chân thành cũng đáng quý. Đừng vì niệm ít mà ngại không hồi hướng."
+        },
+        {
+          "type": "heading",
+          "text": "Việc nhỏ hôm nay"
+        },
+        {
+          "type": "text",
+          "text": "Sau thời niệm hôm nay, đọc bài hồi hướng chậm hơn thường ngày. Trước khi đọc, nghĩ đến một người cụ thể mà quý vị muốn chia sẻ phần lành này."
+        }
+      ]
+    },
+    {
+      "id": "luc-hoa-kinh",
+      "version": 1,
+      "status": "draft",
+      "source": "",
+      "order": 8,
+      "title": "Lục hòa kính",
+      "blocks": [
+        {
+          "type": "text",
+          "text": "Trong năm khoa tu học, sau Tam phước là Lục hòa: sáu phép sống hòa thuận và kính trọng nhau. Phép này vốn dành cho đại chúng cùng tu, nhưng đem vào gia đình, nơi làm việc, xóm giềng đều có ích."
+        },
+        {
+          "type": "heading",
+          "text": "Sáu điều hòa kính"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Kiến hòa đồng giải: chỗ thấy biết hòa hợp, cùng hiểu một hướng. Trong nhà, đó là cùng nhau bàn bạc để hiểu ý nhau, không ai bắt ai phải theo mình.",
+            "Giới hòa đồng tu: cùng giữ những quy ước chung. Đã thống nhất điều gì thì ai cũng giữ, kể cả người lớn.",
+            "Thân hòa đồng trụ: chung sống êm ấm, san sẻ việc nhà, không dùng sức mạnh với nhau.",
+            "Khẩu hòa vô tránh: lời nói hòa nhã, không tranh cãi. Nói đúng mà nặng lời thì người nghe cũng khó nhận.",
+            "Ý hòa đồng duyệt: lòng vui với niềm vui của nhau, thấy người khác được điều hay thì mừng theo.",
+            "Lợi hòa đồng quân: quyền lợi chia sẻ công bằng, không dành phần hơn cho riêng mình."
+          ]
+        },
+        {
+          "type": "quote",
+          "text": "",
+          "source": "",
+          "topic": "Lục hòa kính"
+        },
+        {
+          "type": "heading",
+          "text": "Bắt đầu từ mình"
+        },
+        {
+          "type": "text",
+          "text": "Đọc sáu điều này, ta dễ nghĩ ngay tới người khác: người này hay cãi, người kia ích kỷ. Nhưng hòa kính bắt đầu từ chính mình. Mình hòa trước, không đợi người khác hòa rồi mình mới hòa. Một người trong nhà chịu nhường, không khí cả nhà dễ chịu hơn."
+        },
+        {
+          "type": "text",
+          "text": "Nhường nhịn không có nghĩa là chịu đựng điều sai trái. Gặp việc gây hại cho mình hay cho người yếu thế, cần nói rõ và nhờ người giúp đỡ. Hòa kính là giữ lòng không thù ghét trong lúc làm việc đúng."
+        },
+        {
+          "type": "heading",
+          "text": "Khi ý kiến khác nhau"
+        },
+        {
+          "type": "text",
+          "text": "Người trong nhà có thể theo tôn giáo khác, pháp môn khác, hoặc không theo tôn giáo nào. Tôn trọng điều người thân trân quý cũng là hòa kính. Cách sống hiền hòa, vui vẻ của mình nói được nhiều hơn mọi lời khuyên."
+        },
+        {
+          "type": "text",
+          "text": "Khi sắp tranh cãi, thử dừng lại, niệm thầm vài câu Phật hiệu, rồi hãy nói. Nhiều khi chỉ cần chậm lại chừng ấy, câu nói đã khác đi."
+        },
+        {
+          "type": "heading",
+          "text": "Kính là gốc của hòa"
+        },
+        {
+          "type": "text",
+          "text": "Muốn hòa thì phải kính. Xem mỗi người đều có điểm đáng trọng, đều có thể trở nên tốt đẹp, thì lời nói tự nhiên mềm lại. Với người niệm Phật, nhớ rằng ai cũng có thể thành Phật là một cách giữ lòng kính ấy."
+        },
+        {
+          "type": "heading",
+          "text": "Việc nhỏ hôm nay"
+        },
+        {
+          "type": "text",
+          "text": "Chọn một người mà quý vị hay bất đồng. Hôm nay tìm một điểm tốt của người ấy và nói một lời cảm ơn thật lòng."
+        }
+      ]
+    },
+    {
+      "id": "kinh-vo-luong-tho",
+      "version": 1,
+      "status": "draft",
+      "source": "",
+      "order": 9,
+      "title": "Kinh Vô Lượng Thọ: vì sao Pháp sư khuyên đọc tụng",
+      "blocks": [
+        {
+          "type": "text",
+          "text": "Người tu Tịnh độ theo giáo huấn của Pháp sư Tịnh Không thường đọc tụng kinh Vô Lượng Thọ. Bài này giới thiệu kinh nói về điều gì và cách bắt đầu đọc. Lý do Pháp sư khuyên đọc, xin xem đúng lời Ngài ở phần trích, sẽ được bổ sung sau."
+        },
+        {
+          "type": "heading",
+          "text": "Kinh nói về điều gì?"
+        },
+        {
+          "type": "text",
+          "text": "Vô Lượng Thọ là một nghĩa của danh hiệu A Di Đà. Kinh kể lại việc Phật A Di Đà khi còn tu nhân đã phát những lời nguyện rộng lớn, thường gọi là bốn mươi tám nguyện, rồi tu hành lâu dài để thành tựu thế giới Cực Lạc. Kinh cũng nói về cảnh giới Cực Lạc, về những người được sanh về đó, và khuyên người đời bỏ ác làm lành, niệm Phật cầu sanh."
+        },
+        {
+          "type": "text",
+          "text": "Vì vậy, đọc kinh này giúp hiểu rõ hơn ba điều đã học ở bài đầu: tin vào điều gì, nguyện điều gì, và thực hành thế nào."
+        },
+        {
+          "type": "heading",
+          "text": "Bản kinh nào?"
+        },
+        {
+          "type": "text",
+          "text": "Kinh Vô Lượng Thọ có nhiều bản dịch từ xưa. Bản thường được đọc tụng trong các đạo tràng Tịnh độ theo Pháp sư Tịnh Không là bản hội tập của cư sĩ Hạ Liên Cư. Bản dịch tiếng Việt cũng có nhiều; quý vị nên chọn một bản rõ nguồn gốc và đọc mãi bản ấy cho quen."
+        },
+        {
+          "type": "quote",
+          "text": "",
+          "source": "",
+          "topic": "vì sao khuyên đọc tụng kinh Vô Lượng Thọ"
+        },
+        {
+          "type": "heading",
+          "text": "Đọc tụng thế nào?"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Trước khi đọc, rửa tay, ngồi ngay ngắn, để kinh ở chỗ sạch sẽ, cao ráo.",
+            "Đọc chậm, rõ từng chữ. Không hiểu hết cũng không sao, cứ đọc cho đều.",
+            "Chưa đọc được cả bộ thì mỗi ngày đọc vài phẩm, nhiều ngày thì hết một lượt.",
+            "Đọc xong, niệm Phật một lúc rồi hồi hướng."
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Đọc tụng là để tâm được yên và lời kinh thấm dần. Khi đọc không cần dừng lại suy nghĩ, phân tích. Muốn hiểu nghĩa thì dành lúc khác để nghe giảng hoặc xem giảng ký."
+        },
+        {
+          "type": "heading",
+          "text": "Người mắt kém, không biết chữ"
+        },
+        {
+          "type": "text",
+          "text": "Không đọc được thì nghe. Nghe người khác tụng kinh, nghe giảng kinh với lòng cung kính cũng là học. Con cháu đọc kinh cho ông bà nghe là một việc hiếu rất đẹp. Nếu chỉ niệm được một câu Phật hiệu thì cứ chuyên tâm niệm câu ấy."
+        },
+        {
+          "type": "heading",
+          "text": "Kinh và câu Phật hiệu"
+        },
+        {
+          "type": "text",
+          "text": "Đọc kinh giúp hiểu và tin sâu hơn; niệm Phật là thực hành. Hai việc nâng đỡ nhau. Thời giờ ít thì có thể lấy niệm Phật làm chính, ngày rảnh đọc thêm kinh."
+        },
+        {
+          "type": "heading",
+          "text": "Việc nhỏ hôm nay"
+        },
+        {
+          "type": "text",
+          "text": "Tìm một bản kinh Vô Lượng Thọ rõ nguồn gốc qua phần Đọc thêm. Hôm nay chỉ cần đọc một phẩm, đọc chậm và rõ."
+        }
+      ]
+    },
+    {
+      "id": "ho-niem",
+      "version": 1,
+      "status": "draft",
+      "source": "",
+      "order": 10,
+      "title": "Hộ niệm: cần biết gì khi người thân lâm chung",
+      "blocks": [
+        {
+          "type": "text",
+          "text": "Hộ niệm là ở bên cạnh, niệm Phật để nhắc nhở và trợ giúp người sắp mất giữ được câu Phật hiệu. Bài này chỉ nói những điều cơ bản. Khi gặp việc thật, nên nhờ người có kinh nghiệm hướng dẫn."
+        },
+        {
+          "type": "heading",
+          "text": "Trước hết là chăm sóc"
+        },
+        {
+          "type": "text",
+          "text": "Hộ niệm không thay cho việc chữa bệnh. Người bệnh cần được bác sĩ thăm khám, được giảm đau, được chăm sóc chu đáo. Gặp tình trạng nguy cấp thì gọi cấp cứu. Niệm Phật và chăm sóc y tế có thể đi cùng nhau."
+        },
+        {
+          "type": "heading",
+          "text": "Chuẩn bị từ sớm"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Khi người thân còn tỉnh táo, nên nhẹ nhàng hỏi ý nguyện: có muốn được hộ niệm không, muốn lo hậu sự ra sao.",
+            "Tôn trọng ý của người bệnh. Người theo tôn giáo khác hay không muốn hộ niệm thì không ép.",
+            "Cả nhà bàn bạc trước cho thống nhất, để đến lúc ấy không tranh cãi bên giường bệnh.",
+            "Biết trước vài người đồng tu có thể nhờ giúp."
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Lúc lâm chung"
+        },
+        {
+          "type": "text",
+          "text": "Giữ phòng yên tĩnh, thoáng, sạch sẽ. Nếu được, đặt hình Phật A Di Đà ở chỗ người bệnh dễ nhìn thấy. Người nhà nói lời ngắn, hiền hòa: nhắc người thân buông bớt lo lắng, nhớ những việc lành đã làm, một lòng niệm Phật cầu sanh Cực Lạc."
+        },
+        {
+          "type": "text",
+          "text": "Niệm rõ ràng, đều, vừa nghe; người bệnh niệm theo được thì tốt, không thì lắng nghe. Nên chia nhau thay phiên để tiếng niệm không gián đoạn. Tránh khóc lóc, kể lể, bàn chuyện tài sản bên cạnh người sắp mất, vì dễ làm người ấy xao động."
+        },
+        {
+          "type": "quote",
+          "text": "",
+          "source": "",
+          "topic": "khai thị cho người lâm chung"
+        },
+        {
+          "type": "heading",
+          "text": "Sau khi tắt thở"
+        },
+        {
+          "type": "text",
+          "text": "Theo lời dạy thường gặp trong Tịnh độ, nên tiếp tục niệm Phật thêm nhiều giờ, thường nói là ít nhất tám giờ, và trong thời gian ấy tránh đụng chạm, di chuyển thân thể. Số giờ và cách làm cụ thể cần đối chiếu lại với giảng ký."
+        },
+        {
+          "type": "text",
+          "text": "Nếu mất ở bệnh viện, cần theo quy định nơi đó. Người nhà có thể xin phép giữ yên tĩnh và niệm Phật nhỏ tiếng. Không làm được như mong muốn thì cũng đừng quá áy náy: cứ thành tâm niệm Phật ở bất cứ đâu."
+        },
+        {
+          "type": "quote",
+          "text": "",
+          "source": "",
+          "topic": "thời gian và cách hộ niệm sau khi mất"
+        },
+        {
+          "type": "heading",
+          "text": "Những ngày sau đó"
+        },
+        {
+          "type": "text",
+          "text": "Gia đình có thể giữ việc tang giản dị, ăn chay, niệm Phật, làm việc lành rồi hồi hướng cho người đã mất. Người ở lại cũng cần được an ủi. Buồn là lẽ thường; đừng trách mình, đừng trách nhau. Nếu nỗi buồn kéo dài, nặng nề, hãy tìm người để chia sẻ."
+        },
+        {
+          "type": "heading",
+          "text": "Việc nhỏ hôm nay"
+        },
+        {
+          "type": "text",
+          "text": "Nghĩ về chính mình: mỗi câu Phật hiệu hôm nay cũng là chuẩn bị cho ngày sau. Niệm mười câu thật yên, và nếu thuận tiện, kể cho người thân nghe nguyện vọng của quý vị."
+        }
+      ]
+    }
+  ]
+}

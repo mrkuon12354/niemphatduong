@@ -2,7 +2,7 @@
 
 App tu học Pháp môn Tịnh độ dành cho người Việt. Miễn phí, không quảng cáo, không đăng nhập.
 
-Trạng thái: xong **Giai đoạn C** (Niệm Phật, Thời khóa, âm lịch và Lịch tháng). Hướng dẫn cài lên điện thoại sẽ có ở Giai đoạn E.
+Trạng thái: xong **Giai đoạn D** (Niệm Phật, Thời khóa, Lịch tháng, Bài học). Hướng dẫn cài lên điện thoại sẽ có ở Giai đoạn E.
 
 ## Chạy thử trên máy tính
 

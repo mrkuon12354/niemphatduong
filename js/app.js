@@ -12,7 +12,7 @@ import { startReminders } from './reminders.js';
 import { renderToday } from './today.js';
 import { renderCounter } from './counter.js';
 import { renderSchedule } from './schedule.js';
-import { renderLessons } from './lessons.js';
+import { renderLessons, renderLesson } from './lessons.js';
 import { renderCalendar } from './calendar.js';
 import { renderThapNiem } from './thapniem.js';
 import {
@@ -23,12 +23,14 @@ import { renderAbout, renderPrivacy } from './info.js';
 // Bảng màn hình: mỗi địa chỉ (#/...) ứng với một hàm vẽ.
 // Màn hình có "nav" sẽ hiện ở thanh dưới cùng, theo đúng thứ tự này.
 // "parent": trang con; thanh trên có nút quay lại.
+// "hasParam": địa chỉ còn phần đuôi, ví dụ #/hoc/hoi-huong là bài có id "hoi-huong".
 const ROUTES = [
   { path: '#/hom-nay', nav: 'today', render: renderToday },
   { path: '#/niem-phat', nav: 'counter', render: renderCounter },
   { path: '#/thoi-khoa', nav: 'schedule', render: renderSchedule },
   { path: '#/hoc', nav: 'lessons', render: renderLessons },
   { path: '#/lich', nav: 'calendar', render: renderCalendar },
+  { path: '#/hoc/', hasParam: true, parent: '#/hoc', render: renderLesson },
   { path: '#/thap-niem', parent: '#/thoi-khoa', render: renderThapNiem },
   { path: '#/cai-dat', parent: '#/hom-nay', render: renderSettings },
   { path: '#/cai-dat-niem-phat', parent: '#/cai-dat', render: renderPracticeSettings },
@@ -166,9 +168,21 @@ let cleanup = null; // Hàm dọn dẹp của màn hình đang mở (nếu có)
 let renderNumber = 0;
 let trail = []; // Đường đi tới trang đang mở, ví dụ ['#/hom-nay', '#/cai-dat']
 
+// Tìm màn hình ứng với địa chỉ đang mở.
+function findRoute() {
+  const { hash } = location;
+  const exact = ROUTES.find((r) => r.path === hash && !r.hasParam);
+  if (exact) return exact;
+  const found = ROUTES.find((r) => r.hasParam && hash.startsWith(r.path));
+  if (!found) return ROUTES[0];
+  return { ...found, path: hash, param: hash.slice(found.path.length) };
+}
+
 function updateTrail(route) {
   if (trail.includes(route.path)) {
     trail = trail.slice(0, trail.indexOf(route.path) + 1);
+  } else if (route.hasParam) {
+    trail = [route.parent, route.path]; // Nút quay lại ở bài học luôn về danh sách bài
   } else if (route.parent && trail.length > 0) {
     trail = [...trail, route.path];
   } else {
@@ -180,7 +194,7 @@ function updateTrail(route) {
 // Mỗi hàm vẽ nhận (page, ctx), có thể trả về một hàm dọn dẹp,
 // sẽ được gọi khi người dùng rời màn hình đó.
 async function renderCurrentRoute({ moveFocus = false } = {}) {
-  const route = ROUTES.find((r) => r.path === location.hash) ?? ROUTES[0];
+  const route = findRoute();
   updateTrail(route);
   const myNumber = ++renderNumber;
   cleanup?.();
@@ -189,7 +203,7 @@ async function renderCurrentRoute({ moveFocus = false } = {}) {
   const page = el('div', { class: 'page' });
   let pageCleanup = null;
   try {
-    pageCleanup = await route.render(page, ctx);
+    pageCleanup = await route.render(page, ctx, route.param);
   } catch (error) {
     console.error(error);
     page.replaceChildren(pageTitle(S.common.errorTitle), card(null, el('p', {}, S.common.errorBody)));

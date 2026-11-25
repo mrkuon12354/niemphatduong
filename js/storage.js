@@ -325,7 +325,8 @@ function isValidProgress(p) {
     p !== null && typeof p === 'object' &&
     typeof p.id === 'string' && p.id !== '' &&
     typeof p.lessonId === 'string' &&
-    [p.createdAt, p.updatedAt].every(isValidTime)
+    [p.createdAt, p.updatedAt].every(isValidTime) &&
+    (p.deletedAt === undefined || isValidTime(p.deletedAt))
   );
 }
 
@@ -410,6 +411,40 @@ export async function requestPersistence() {
   } catch {
     // Trình duyệt không hỗ trợ: bỏ qua.
   }
+}
+
+// ---------------------------------------------------------------------------
+// Tiến độ bài học. id của bản ghi chính là id bài học, nên gộp dữ liệu nhiều máy
+// thì mỗi bài vẫn chỉ có một bản ghi.
+// ---------------------------------------------------------------------------
+
+// Các bài đã học: Map { 'hoi-huong' → thời điểm bấm "Đã học", ... }
+export async function getLearnedLessons() {
+  const db = await initStorage();
+  await writeQueue;
+  const records = (await db.getAll('lessonProgress')).filter((p) => !p.deletedAt);
+  return new Map(records.map((p) => [p.lessonId, p.updatedAt]));
+}
+
+// Đánh dấu đã học (true) hoặc chưa học (false).
+export function setLessonLearned(lessonId, learned) {
+  return enqueue(async () => {
+    const db = await initStorage();
+    const old = await db.get('lessonProgress', lessonId);
+    if (!old && !learned) return;
+    const now = toLocalIso();
+    await db.write([{
+      store: 'lessonProgress',
+      put: {
+        id: lessonId,
+        lessonId,
+        deviceId: old?.deviceId ?? (await getDeviceId()),
+        createdAt: old?.createdAt ?? now,
+        updatedAt: now,
+        ...(learned ? {} : { deletedAt: now }),
+      },
+    }]);
+  });
 }
 
 // ---------------------------------------------------------------------------

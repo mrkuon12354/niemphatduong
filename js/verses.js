@@ -4,10 +4,10 @@ import { S } from './strings.js';
 import { el } from './ui.js';
 
 // Nhãn cho nội dung chưa thẩm định; nội dung đã duyệt thì không hiện gì.
-export function reviewLabel(item) {
+export function reviewLabel(item, text = S.common.reviewLabel) {
   return item.status === 'reviewed'
     ? null
-    : el('p', { class: 'review-label' }, S.common.reviewLabel);
+    : el('p', { class: 'review-label' }, text);
 }
 
 export function verseView(verse) {

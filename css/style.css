@@ -323,6 +323,7 @@ button, .btn, .choice, .menu-link, .nav-item, .header-btn { user-select: none; -
 .menu-arrow { flex: none; font-size: 1.6rem; line-height: 1; color: var(--muted); }
 
 .sub-title { margin: 0; font-weight: 600; }
+h2.sub-title { margin-top: 8px; font-size: 1.1rem; font-weight: 700; line-height: 1.35; }
 
 /* Chỉ dành cho phần mềm đọc màn hình. */
 .visually-hidden {
@@ -438,7 +439,9 @@ button, .btn, .choice, .menu-link, .nav-item, .header-btn { user-select: none; -
 
 .review-label {
   width: fit-content;
-  padding: 0.15rem 0.7rem;
+  padding: 0.25rem 0.7rem;
+  line-height: 1.3;
+  text-wrap: balance;
   border: 2px solid var(--danger);
   border-radius: 8px;
   color: var(--danger);
@@ -448,6 +451,21 @@ button, .btn, .choice, .menu-link, .nav-item, .header-btn { user-select: none; -
 
 .card > .btn { width: 100%; }
 .card .setting-value + .choices { margin-top: 0.75rem; }
+
+/* ---------- Bài học ---------- */
+
+.lesson { line-height: 1.65; }
+.lesson-title { margin: 0 0 0.3rem; font-size: 1.3rem; line-height: 1.35; text-wrap: balance; }
+.lesson-heading { margin: 1.4rem 0 0.4rem; font-size: 1.1rem; line-height: 1.35; }
+.lesson .list { margin-bottom: 0.75rem; }
+.quote-missing, .lesson-quote {
+  margin: 0 0 0.75rem;
+  padding: 10px 14px;
+  border-radius: var(--radius);
+}
+.quote-missing { border: 2px dashed var(--control-border); }
+.lesson-quote { border-left: 4px solid var(--primary); border-radius: 0; background: var(--highlight); }
+.quote-missing p { margin: 0; }
 
 /* ---------- Lịch tháng ---------- */
 

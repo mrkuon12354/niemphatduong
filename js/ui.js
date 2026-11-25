@@ -38,18 +38,11 @@ export function card(heading, ...children) {
     ...children);
 }
 
-export function comingSoon(title, stage) {
-  return [
-    pageTitle(title),
-    card(null,
-      el('p', {}, S.common.comingSoon),
-      el('p', { class: 'muted' }, S.common.comingSoonStage(stage))),
-  ];
-}
-
 // Một dòng trong danh sách mục: bấm vào thì mở trang khác.
-export function menuLink({ href, label, note }) {
-  return el('a', { class: 'menu-link', href },
+// external: trang web ngoài app, mở ở cửa sổ khác.
+export function menuLink({ href, label, note, external = false }) {
+  const outside = external ? { target: '_blank', rel: 'noopener noreferrer' } : {};
+  return el('a', { class: 'menu-link', href, ...outside },
     el('span', { class: 'menu-text' },
       el('span', { class: 'menu-label' }, label),
       note ? el('span', { class: 'menu-note' }, note) : null),
