@@ -1,20 +1,27 @@
-// schedule.js — Màn hình "Thời khóa": thời khóa sáng/tối và Thập niệm pháp.
+// schedule.js — Màn hình "Thời khóa": thời khóa sáng/tối, lối vào Thập niệm pháp.
 
-import { MINUTES_LIMIT, COUNT_LIMIT } from './config.js';
 import { S } from './strings.js';
-import { toDateKey, toLocalIso } from './dates.js';
-import { getSessionsOfDate, addSession, deleteSession } from './storage.js';
-import { getVerse, getPractice } from './content.js';
+import { toDateKey } from './dates.js';
+import { getSessionsOfDate } from './storage.js';
+import { getVerse } from './content.js';
 import { createPractice } from './practice.js';
 import { unlockSound } from './sound.js';
-import { counterView, recordingControl, showSaveError, summaryLine } from './counter.js';
-import { woodfishControl, countControl, stopControl } from './controls.js';
-import { el, button, pageTitle, card, choiceGroup, numberField, toggle } from './ui.js';
-import { verseView, reviewLabel } from './verses.js';
+import { counterView, showSaveError, summaryLine } from './counter.js';
+import { getThapNiemSummary } from './thapniem.js';
+import { el, button, pageTitle, card, menuLink } from './ui.js';
+import { verseView } from './verses.js';
 
 // Thời khóa đang làm dở: { type: 'morning' | 'evening', step: 0..2, practice, dateKey }
 // Giữ ở đây để lỡ bấm sang mục khác thì quay lại vẫn đúng bước đang làm.
 let flow = null;
+
+// Phần niệm Phật dài bao lâu, ví dụ "Niệm Phật 10 phút".
+export function goalText({ goalKind, goalMinutes, goalCount }) {
+  const T = S.schedule;
+  if (goalKind === 'minutes') return T.goalMinutesText(S.common.number(goalMinutes));
+  if (goalKind === 'count') return T.goalCountText(S.common.number(goalCount));
+  return T.goalFreeText;
+}
 
 export async function renderSchedule(page, ctx) {
   let cleanups = [];
@@ -59,49 +66,20 @@ export async function renderSchedule(page, ctx) {
   async function drawHome() {
     const T = S.schedule;
     const sessions = await getSessionsOfDate(toDateKey());
-    const settings = ctx.getSettings();
+    const thapNiem = await getThapNiemSummary(sessions);
 
     const startCard = (type) => card(T.names[type],
       sessions.some((s) => s.type === type) ? el('p', { class: 'muted' }, T.doneToday) : null,
       button(T.begin, { variant: 'primary', onclick: () => begin(type) }));
 
-    const minutes = numberField({
-      label: T.goalMinutes, value: settings.goalMinutes, ...MINUTES_LIMIT,
-      onchange: (goalMinutes) => ctx.updateSettings({ goalMinutes }),
-    });
-    const count = numberField({
-      label: T.goalCount, value: settings.goalCount, ...COUNT_LIMIT,
-      onchange: (goalCount) => ctx.updateSettings({ goalCount }),
-    });
-    const stop = stopControl(ctx);
-    const showGoal = (kind) => {
-      stop.hidden = kind === 'free';
-      minutes.hidden = kind !== 'minutes';
-      count.hidden = kind !== 'count';
-    };
-    showGoal(settings.goalKind);
-
     return [
       pageTitle(T.title),
       startCard('morning'),
       startCard('evening'),
-      card(T.goalTitle,
-        el('div', { class: 'stack' },
-          choiceGroup({
-            name: 'goal', label: T.goalTitle, value: settings.goalKind,
-            options: [
-              { value: 'minutes', label: T.goalByMinutes },
-              { value: 'count', label: T.goalByCount },
-              { value: 'free', label: T.goalFree },
-            ],
-            onchange: (goalKind) => {
-              ctx.updateSettings({ goalKind });
-              showGoal(goalKind);
-            },
-          }),
-          minutes, count, stop)),
-      await drawThapNiem(sessions),
-      el('a', { class: 'btn btn-secondary', href: '#/cai-dat' }, T.setReminder),
+      menuLink({ href: '#/thap-niem', label: thapNiem.title, note: thapNiem.progress }),
+      menuLink({
+        href: '#/cai-dat-thoi-khoa', label: T.settingsLink, note: goalText(ctx.getSettings()),
+      }),
     ];
   }
 
@@ -109,15 +87,13 @@ export async function renderSchedule(page, ctx) {
 
   async function drawStep() {
     const T = S.schedule;
-    const heading = [
-      el('p', { class: 'muted' }, T.progress(T.names[flow.type], flow.step + 1, 3)),
-    ];
+    const progress = el('p', { class: 'muted' }, T.progress(T.names[flow.type], flow.step + 1, 3));
     const exitButton = button(T.exit, { onclick: exit });
 
     if (flow.step === 0) {
       const verse = await getVerse('tan-phat-ke');
       return [
-        ...heading, pageTitle(verse.title), verseView(verse),
+        progress, pageTitle(verse.title), verseView(verse),
         button(T.next, {
           variant: 'primary',
           onclick: () => {
@@ -133,7 +109,6 @@ export async function renderSchedule(page, ctx) {
 
     if (flow.step === 1) {
       const { practice } = flow;
-      const recording = await recordingControl(ctx, practice);
       const counter = await counterView(ctx, practice, {
         endLabel: T.next,
         onFinish: () => {
@@ -141,21 +116,15 @@ export async function renderSchedule(page, ctx) {
           else goTo(2);
         },
       });
-      const woodfish = woodfishControl(ctx);
-      const counting = countControl(ctx, practice);
-      cleanups.push(counter.cleanup, woodfish.cleanup, counting.cleanup);
-      return [
-        ...heading, pageTitle(S.counter.title), counter.node,
-        card(S.counter.woodfishTitle, woodfish.node),
-        card(S.counter.countTitle, counting.node),
-        ...(recording ? [card(S.counter.recordingTitle, recording)] : []),
-        exitButton,
-      ];
+      cleanups.push(counter.cleanup);
+      const title = pageTitle(S.counter.title);
+      title.classList.add('visually-hidden');
+      return [progress, title, counter.node, exitButton];
     }
 
     const verse = await getVerse('hoi-huong');
     return [
-      ...heading, pageTitle(verse.title), verseView(verse),
+      progress, pageTitle(verse.title), verseView(verse),
       ...summaryLine(flow.practice),
       button(T.finish, { variant: 'primary', onclick: exit }),
     ];
@@ -170,60 +139,6 @@ export async function renderSchedule(page, ctx) {
     });
   }
 
-  // ------------------------------------------------------------- Thập niệm pháp
-
-  async function drawThapNiem(sessions) {
-    const T = S.schedule;
-    const info = await getPractice('thap-niem');
-    // slot -> danh sách id các bản ghi hôm nay của lần đó
-    const done = new Map();
-    for (const s of sessions) {
-      if (s.type === 'thapniem' && s.slot) done.set(s.slot, [...(done.get(s.slot) ?? []), s.id]);
-    }
-    const summary = el('p', { class: 'setting-value', 'aria-live': 'polite' });
-    const updateSummary = () => {
-      const checked = info.slots.filter((slot) => done.get(slot.id)?.length).length;
-      summary.textContent = T.thapNiemProgress(checked, info.slots.length);
-    };
-    updateSummary();
-
-    const rows = info.slots.map((slot) => {
-      const row = toggle({
-        label: slot.label,
-        checked: Boolean(done.get(slot.id)?.length),
-        onchange: async (checked) => {
-          const input = row.querySelector('input');
-          input.disabled = true; // Đợi ghi xong mới cho chạm tiếp
-          try {
-            if (checked) {
-              const now = toLocalIso();
-              const record = await addSession({
-                startedAt: now, endedAt: now, phrase: info.phrase,
-                count: info.countPerSlot, durationSec: 0, type: 'thapniem', slot: slot.id,
-              });
-              done.set(slot.id, [record.id]);
-            } else {
-              for (const id of done.get(slot.id) ?? []) await deleteSession(id);
-              done.delete(slot.id);
-            }
-            updateSummary();
-          } catch (error) {
-            input.checked = !checked;
-            showSaveError(error);
-          }
-          input.disabled = false;
-        },
-      });
-      return row;
-    });
-
-    return card(info.title,
-      reviewLabel(info),
-      ...info.description.map((text) => el('p', {}, text)),
-      summary,
-      el('div', { class: 'choices' }, rows));
-  }
-
   // ------------------------------------------------------------------- Bắt đầu
 
   // Thời khóa bỏ dở từ hôm trước, hoặc dữ liệu vừa bị xóa: quay về trang chính.
@@ -234,7 +149,7 @@ export async function renderSchedule(page, ctx) {
 
   page.append(...(flow ? await drawStep() : await drawHome()));
 
-  // Để qua nửa đêm: bảng Thập niệm phải sang ngày mới.
+  // Để qua nửa đêm: các dòng "hôm nay" phải sang ngày mới.
   const dateKey = toDateKey();
   const onVisible = () => {
     if (!document.hidden && !flow && toDateKey() !== dateKey) ctx.refresh();

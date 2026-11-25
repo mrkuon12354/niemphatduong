@@ -147,7 +147,7 @@ export function createPractice({ ctx, type, phrase, goal = null, onSaveError }) 
       deafFor(KNOCK_MS);
       if (ctx.getSettings().countMode !== 'woodfish') return;
       if (practice.state === 'idle' || practice.state === 'paused') practice.start();
-      beat();
+      beat({ isTouch: true });
     },
 
     // Người dùng tự gõ khánh.
@@ -225,13 +225,13 @@ export function createPractice({ ctx, type, phrase, goal = null, onSaveError }) 
   }
 
   // Một tiếng mõ vừa kêu (app gõ hoặc người dùng gõ).
-  function beat() {
+  function beat({ isTouch = false } = {}) {
     const { countMode, beatsPerPhrase } = ctx.getSettings();
     if (countMode !== 'woodfish' || practice.state !== 'running') return;
     beats += 1;
     if (beats < beatsPerPhrase) return;
     beats = 0;
-    addOne();
+    addOne({ isTouch });
   }
 
   function stopClock() {
@@ -270,7 +270,7 @@ export function createPractice({ ctx, type, phrase, goal = null, onSaveError }) 
     if (!settings.woodfishOn) {
       stopWoodfish();
     } else {
-      startWoodfish(settings.woodfishBpm, delaySec, beat);
+      startWoodfish(settings.woodfishBpm, delaySec, () => beat());
       setWoodfishBpm(settings.woodfishBpm);
     }
     syncMicrophone(settings);

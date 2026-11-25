@@ -1,14 +1,15 @@
 // counter.js — Tràng hạt số: vòng tròn lớn để đếm, và màn hình "Niệm Phật".
+// Màn hình này chỉ để niệm. Mọi lựa chọn nằm ở trang "Cài đặt niệm Phật" (settings.js).
 
-import { BEADS_PER_ROUND, PHRASES } from './config.js';
+import { BEADS_PER_ROUND } from './config.js';
 import { S } from './strings.js';
 import { toDateKey, dateKeyOfIso } from './dates.js';
 import { getCountOfDate } from './storage.js';
 import { getVerse, getRecordings } from './content.js';
 import { createPractice } from './practice.js';
 import { unlockSound } from './sound.js';
-import { el, button, pageTitle, card, choiceGroup, toast } from './ui.js';
-import { woodfishControl, countControl, timerControl } from './controls.js';
+import { el, button, pageTitle, menuLink, toast } from './ui.js';
+import { countStyleOf } from './controls.js';
 import { verseView } from './verses.js';
 
 export const showSaveError = (error) => {
@@ -50,13 +51,22 @@ function formatClock(totalSec) {
   return hours > 0 ? `${hours}:${rest}` : rest;
 }
 
+// Tóm tắt các lựa chọn đang dùng, ví dụ "Chạm để đếm · Tự dừng"
+function settingsSummary(settings, withTimer) {
+  const T = S.counter;
+  const parts = [T.countStyles[countStyleOf(settings)].label];
+  if (withTimer) parts.push(settings.timerMinutes > 0 ? T.minutes(settings.timerMinutes) : T.timerNone);
+  return parts.join(' · ');
+}
+
 // ---------------------------------------------------------------------------
 // Phần đếm dùng chung cho "Niệm Phật" và "Thời khóa"
 // Trả về { node, cleanup }. Rời màn hình khi đang niệm thì tự tạm nghỉ.
 // ---------------------------------------------------------------------------
 
-export async function counterView(ctx, practice, { endLabel, onFinish }) {
+export async function counterView(ctx, practice, { endLabel, onFinish, withTimer = false }) {
   const T = S.counter;
+  await applyRecording(ctx, practice);
   const countBefore = await getCountOfDate(
     practice.startedAt ? dateKeyOfIso(practice.startedAt) : toDateKey(),
     { exceptId: practice.id });
@@ -65,13 +75,25 @@ export async function counterView(ctx, practice, { endLabel, onFinish }) {
   const number = el('span', { class: 'bead-number' });
   const hint = el('span', { class: 'bead-hint' });
   const bead = el('button', { type: 'button', class: 'bead' }, phrase, number, hint);
+  // Cách "Gõ mõ để đếm": vòng tròn chính là cái mõ.
+  const press = () => {
+    if (countStyleOf(ctx.getSettings()) === 'handWoodfish') practice.knock();
+    else practice.tap();
+  };
+  onPress(bead, press);
 
-  const sessionValue = el('dd', {});
-  const todayValue = el('dd', {});
-  const roundValue = el('dd', {});
   const clock = el('p', { class: 'clock' });
-  const stat = (label, value) => el('div', { class: 'stat' }, el('dt', {}, label), value);
+  const micLine = el('p', { class: 'center' });
+  const countLine = el('p', { class: 'center muted' });
 
+  // --- Tự gõ mõ, gõ khánh
+  const knockButton = button(T.knock, { class: 'btn btn-secondary btn-strike' });
+  onPress(knockButton, () => practice.knock());
+  const chimeButton = button(T.chime, { class: 'btn btn-secondary btn-strike' });
+  onPress(chimeButton, () => practice.chime());
+  const strikes = el('div', { class: 'row strikes' }, knockButton, chimeButton);
+
+  // --- Tạm nghỉ, kết thúc, bớt một câu
   const pauseButton = button('', {
     onclick: () => {
       if (practice.state === 'running') {
@@ -83,18 +105,14 @@ export async function counterView(ctx, practice, { endLabel, onFinish }) {
     },
   });
   const endButton = button(endLabel, { variant: 'primary', onclick: () => practice.finish() });
-  const actions = el('div', { class: 'row' }, pauseButton, endButton);
-
-  onPress(bead, () => practice.tap());
-
-  // --- Tự gõ mõ, gõ khánh; bớt câu; dòng báo của micro
-  const knockButton = button(T.knock, { class: 'btn btn-secondary btn-strike' });
-  onPress(knockButton, () => practice.knock());
-  const chimeButton = button(T.chime, { class: 'btn btn-secondary btn-strike' });
-  onPress(chimeButton, () => practice.chime());
-  const strikes = el('div', { class: 'row' }, knockButton, chimeButton);
+  const actions = el('div', { class: 'row strikes' }, pauseButton, endButton);
   const undoButton = button(T.undo, { onclick: () => practice.undo() });
-  const micLine = el('p', { class: 'center' });
+
+  // --- Lối vào trang cài đặt, chỉ hiện khi không niệm
+  const settingsLink = menuLink({
+    href: '#/cai-dat-niem-phat', label: T.settingsLink,
+    note: settingsSummary(ctx.getSettings(), withTimer),
+  });
 
   // --- Bàn phím: Space/Enter đếm, trừ khi đang đứng ở một nút hay ô nhập khác.
   const isCountKey = (event) => {
@@ -107,7 +125,7 @@ export async function counterView(ctx, practice, { endLabel, onFinish }) {
   const onKeyDown = (event) => {
     if (!isCountKey(event)) return;
     event.preventDefault();
-    if (!event.repeat) practice.tap(); // Giữ phím không được tính thêm
+    if (!event.repeat) press(); // Giữ phím không được tính thêm
   };
   const onKeyUp = (event) => {
     if (isCountKey(event)) event.preventDefault();
@@ -118,32 +136,44 @@ export async function counterView(ctx, practice, { endLabel, onFinish }) {
   // --- Cập nhật chữ số trên màn hình
   const update = () => {
     const { state, count } = practice;
+    const settings = ctx.getSettings();
+    const isIdle = state === 'idle';
+    const isRunning = state === 'running';
+    const style = countStyleOf(settings);
+
     phrase.textContent = S.phrases[practice.phrase];
     number.textContent = S.common.number(count);
-    const settings = ctx.getSettings();
-    hint.textContent = (state === 'running' && T.runningHints[settings.countMode]) || T.hints[state] || '';
-    knockButton.hidden = !settings.handWoodfish;
-    chimeButton.hidden = !settings.handChime;
-    strikes.hidden = knockButton.hidden && chimeButton.hidden;
-    undoButton.hidden = count === 0;
-    micLine.textContent = T.micStatus[practice.micStatus];
-    micLine.hidden = practice.micStatus === 'off';
+    if (isRunning) hint.textContent = T.runningHints[style];
+    else hint.textContent = isIdle && style === 'handWoodfish' ? T.idleKnockHint : T.hints[state] ?? '';
     bead.setAttribute('aria-label', T.beadLabel(S.phrases[practice.phrase], count));
     bead.style.setProperty('--progress', `${((count % BEADS_PER_ROUND) / BEADS_PER_ROUND) * 360}deg`);
-    bead.classList.toggle('running', state === 'running');
-
-    sessionValue.textContent = practice.goalCount === null
-      ? S.common.number(count)
-      : `${S.common.number(count)} / ${S.common.number(practice.goalCount)}`;
-    todayValue.textContent = S.common.number(countBefore + count);
-    roundValue.textContent = T.rounds(Math.floor(count / BEADS_PER_ROUND), count % BEADS_PER_ROUND);
+    bead.classList.toggle('running', isRunning);
 
     const remaining = practice.remainingSec();
     const elapsed = formatClock(practice.elapsedSec());
     if (practice.goalReached) clock.textContent = T.goalReached(elapsed);
     else clock.textContent = remaining === null ? T.elapsed(elapsed) : T.remaining(formatClock(remaining));
-    actions.hidden = state === 'idle';
-    pauseButton.textContent = state === 'running' ? T.pause : T.resume;
+    clock.hidden = isIdle && remaining === null; // Chưa niệm, không hẹn giờ: chưa có gì để hiện
+
+    micLine.textContent = T.micStatus[practice.micStatus];
+    micLine.hidden = practice.micStatus === 'off';
+
+    const lines = [practice.goalCount === null
+      ? T.todayLine(S.common.number(countBefore + count))
+      : T.goalLine(S.common.number(count), S.common.number(practice.goalCount))];
+    if (count >= BEADS_PER_ROUND) {
+      lines.push(T.rounds(Math.floor(count / BEADS_PER_ROUND), count % BEADS_PER_ROUND));
+    }
+    countLine.textContent = lines.join(' · ');
+
+    knockButton.hidden = !settings.handWoodfish || style === 'handWoodfish';
+    chimeButton.hidden = !settings.handChime;
+    strikes.hidden = knockButton.hidden && chimeButton.hidden;
+    bead.classList.toggle('compact', !strikes.hidden); // Nhường chỗ cho nút mõ, khánh
+    actions.hidden = isIdle;
+    pauseButton.textContent = isRunning ? T.pause : T.resume;
+    undoButton.hidden = count === 0;
+    settingsLink.hidden = isRunning;
   };
   update();
 
@@ -152,23 +182,11 @@ export async function counterView(ctx, practice, { endLabel, onFinish }) {
     else update();
   });
 
-  const removeSettingsListener = ctx.onSettingsChange(update);
-
   return {
     node: el('div', { class: 'counter' },
-      bead,
-      clock,
-      micLine,
-      strikes,
-      actions,
-      el('dl', { class: 'stats' },
-        stat(T.sessionCount, sessionValue),
-        stat(T.todayCount, todayValue),
-        stat(T.roundCount, roundValue)),
-      undoButton),
+      bead, el('div', {}, clock, micLine, countLine), strikes, actions, undoButton, settingsLink),
     cleanup() {
       removeListener();
-      removeSettingsListener();
       document.removeEventListener('keydown', onKeyDown);
       document.removeEventListener('keyup', onKeyUp);
       practice.pause();
@@ -176,30 +194,13 @@ export async function counterView(ctx, practice, { endLabel, onFinish }) {
   };
 }
 
-// Chọn file ghi âm. Trả về null nếu chưa có file nào (khi đó giao diện ẩn đi).
-export async function recordingControl(ctx, practice) {
-  const recordings = await getRecordings();
-  if (recordings.length === 0) return null;
-  const apply = (id) => {
-    const item = recordings.find((r) => r.id === id);
-    practice.setRecording(item
-      ? { url: item.url, onError: () => toast(S.counter.recordingFailed) }
-      : null);
-  };
-  const saved = ctx.getSettings().recordingId;
-  const current = recordings.some((r) => r.id === saved) ? saved : '';
-  apply(current);
-  return choiceGroup({
-    name: 'recording', label: S.counter.recordingTitle, value: current,
-    options: [
-      { value: '', label: S.counter.recordingNone },
-      ...recordings.map((r) => ({ value: r.id, label: r.title })),
-    ],
-    onchange: (recordingId) => {
-      ctx.updateSettings({ recordingId });
-      apply(recordingId);
-    },
-  });
+// Dùng file ghi âm đã chọn trong cài đặt (nếu có).
+async function applyRecording(ctx, practice) {
+  const id = ctx.getSettings().recordingId;
+  const item = id ? (await getRecordings()).find((r) => r.id === id) : null;
+  practice.setRecording(item
+    ? { url: item.url, onError: () => toast(S.counter.recordingFailed) }
+    : null);
 }
 
 // ---------------------------------------------------------------------------
@@ -207,6 +208,7 @@ export async function recordingControl(ctx, practice) {
 // ---------------------------------------------------------------------------
 
 let current = null;       // Thời niệm tự do đang mở (giữ lại khi sang màn hình khác)
+let currentTimer = 0;     // Số phút đã hẹn cho thời niệm đó
 let autoStart = false;
 
 // Nút "Bắt đầu niệm Phật" ở màn hình Hôm nay gọi hàm này.
@@ -220,13 +222,16 @@ function getCurrentPractice(ctx) {
   const isOver = !current || current.state === 'finished' || current.state === 'discarded';
   const isOld = current?.startedAt && dateKeyOfIso(current.startedAt) !== toDateKey();
   if (isOld && !isOver) current.finish({ silent: true }); // Thời bỏ dở từ hôm trước: khép lại
+  const { phrase, timerMinutes } = ctx.getSettings();
   if (isOver || isOld || current.state === 'idle') {
-    const settings = ctx.getSettings();
     current = createPractice({
-      ctx, type: 'free', phrase: settings.phrase, onSaveError: showSaveError,
-      goal: settings.timerMinutes > 0 ? { kind: 'minutes', value: settings.timerMinutes } : null,
+      ctx, type: 'free', phrase, onSaveError: showSaveError,
+      goal: timerMinutes > 0 ? { kind: 'minutes', value: timerMinutes } : null,
     });
+  } else if (timerMinutes !== currentTimer) {
+    current.setTimer(timerMinutes); // Vừa đổi hẹn giờ trong lúc tạm nghỉ
   }
+  currentTimer = timerMinutes;
   return current;
 }
 
@@ -238,59 +243,37 @@ export async function renderCounter(page, ctx) {
 
   // Nạp sẵn bài Hồi hướng, để lúc niệm xong hiện ra ngay.
   const dedication = await getVerse('hoi-huong');
-  const recording = await recordingControl(ctx, practice);
   const counter = await counterView(ctx, practice, {
     endLabel: T.end,
+    withTimer: true,
     onFinish: () => {
       if (practice.state === 'discarded') ctx.refresh();
       else showDedication();
     },
   });
-  const woodfish = woodfishControl(ctx);
-  const timer = timerControl(ctx, (minutes) => practice.setTimer(minutes));
-  const counting = countControl(ctx, practice);
-  const parts = [counter, woodfish, counting, timer];
 
-  // Chỉ chọn câu niệm khi chưa bắt đầu.
-  const phraseCard = card(T.phraseTitle, choiceGroup({
-    name: 'phrase', label: T.phraseTitle, value: practice.phrase,
-    options: PHRASES.map((value) => ({ value, label: S.phrases[value], hint: S.phraseLength[value] })),
-    onchange: (phrase) => {
-      ctx.updateSettings({ phrase });
-      practice.setPhrase(phrase);
-    },
-  }));
-  const updatePhraseCard = () => { phraseCard.hidden = practice.state !== 'idle'; };
-  updatePhraseCard();
-  const removeListener = practice.onChange(updatePhraseCard);
-
-  page.append(
-    pageTitle(T.title),
-    counter.node,
-    card(T.woodfishTitle, woodfish.node),
-    card(T.countTitle, counting.node),
-    card(T.timerTitle, timer.node),
-    phraseCard);
-  if (recording) page.append(card(T.recordingTitle, recording));
+  // Tiêu đề chỉ dành cho phần mềm đọc màn hình, để vòng tròn được rộng chỗ.
+  const title = pageTitle(T.title);
+  title.classList.add('visually-hidden');
+  page.append(title, counter.node);
 
   let isCleaned = false;
   function cleanup() {
     if (isCleaned) return;
     isCleaned = true;
-    removeListener();
-    parts.forEach((part) => part.cleanup());
+    counter.cleanup();
   }
 
   function showDedication() {
     cleanup();
-    const title = pageTitle(dedication.title);
+    const heading = pageTitle(dedication.title);
     page.replaceChildren(
-      title,
+      heading,
       verseView(dedication),
       ...summaryLine(practice),
       button(T.done, { variant: 'primary', onclick: () => ctx.navigate('#/hom-nay') }));
     window.scrollTo(0, 0);
-    title.focus({ preventScroll: true });
+    heading.focus({ preventScroll: true });
   }
 
   if (shouldStart) practice.start();

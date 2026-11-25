@@ -41,7 +41,17 @@ export function comingSoon(title, stage) {
   ];
 }
 
-// Nhóm lựa chọn "chọn một". options: [{ value, label, hint }]
+// Một dòng trong danh sách mục: bấm vào thì mở trang khác.
+export function menuLink({ href, label, note }) {
+  return el('a', { class: 'menu-link', href },
+    el('span', { class: 'menu-text' },
+      el('span', { class: 'menu-label' }, label),
+      note ? el('span', { class: 'menu-note' }, note) : null),
+    el('span', { class: 'menu-arrow', 'aria-hidden': 'true' }, '›'));
+}
+
+// Nhóm lựa chọn "chọn một". options: [{ value, label, hint, note }]
+// hint: trong ngoặc, cùng dòng; note: dòng giải thích ở dưới.
 // inline: xếp các lựa chọn cạnh nhau thay vì mỗi dòng một lựa chọn.
 export function choiceGroup({ name, label, options, value, onchange, inline = false }) {
   const className = inline ? 'choices choices-inline' : 'choices';
@@ -55,7 +65,8 @@ export function choiceGroup({ name, label, options, value, onchange, inline = fa
         input,
         el('span', { class: 'choice-label' },
           option.label,
-          option.hint ? el('span', { class: 'muted' }, ` (${option.hint})`) : null));
+          option.hint ? el('span', { class: 'muted' }, ` (${option.hint})`) : null,
+          option.note ? el('span', { class: 'choice-note' }, option.note) : null));
     }));
   // Đổi lựa chọn từ bên ngoài (không gọi onchange).
   node.setValue = (newValue) => {

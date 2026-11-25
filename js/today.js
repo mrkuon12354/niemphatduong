@@ -5,7 +5,7 @@ import { S } from './strings.js';
 import { toDateKey } from './dates.js';
 import { getCountOfDate } from './storage.js';
 import { startFreePractice } from './counter.js';
-import { el, button, pageTitle, card } from './ui.js';
+import { el, button, pageTitle, card, menuLink } from './ui.js';
 
 export async function renderToday(page, ctx) {
   const now = new Date();
@@ -19,7 +19,8 @@ export async function renderToday(page, ctx) {
     card(S.today.countLabel,
       el('p', { class: 'big-number' },
         S.common.number(count), ' ',
-        el('span', { class: 'big-number-unit' }, S.today.countUnit))));
+        el('span', { class: 'big-number-unit' }, S.today.countUnit))),
+    menuLink({ href: '#/cai-dat', label: S.settings.title }));
 
   // App để mở qua nửa đêm: khi quay lại thì vẽ lại cho đúng ngày mới.
   const onVisible = () => {

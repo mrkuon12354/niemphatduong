@@ -12,18 +12,27 @@ import { renderCounter } from './counter.js';
 import { renderSchedule } from './schedule.js';
 import { renderLessons } from './lessons.js';
 import { renderCalendar } from './calendar.js';
-import { renderSettings } from './settings.js';
+import { renderThapNiem } from './thapniem.js';
+import {
+  renderSettings, renderPracticeSettings, renderScheduleSettings, renderDisplaySettings, renderDataSettings,
+} from './settings.js';
 import { renderAbout, renderPrivacy } from './info.js';
 
 // Bảng màn hình: mỗi địa chỉ (#/...) ứng với một hàm vẽ.
 // Màn hình có "nav" sẽ hiện ở thanh dưới cùng, theo đúng thứ tự này.
+// "under": trang con, khi mở thì mục mẹ ở thanh dưới vẫn sáng.
 const ROUTES = [
   { path: '#/hom-nay', nav: 'today', render: renderToday },
   { path: '#/niem-phat', nav: 'counter', render: renderCounter },
   { path: '#/thoi-khoa', nav: 'schedule', render: renderSchedule },
   { path: '#/hoc', nav: 'lessons', render: renderLessons },
   { path: '#/lich', nav: 'calendar', render: renderCalendar },
+  { path: '#/thap-niem', under: '#/thoi-khoa', render: renderThapNiem },
   { path: '#/cai-dat', render: renderSettings },
+  { path: '#/cai-dat-niem-phat', render: renderPracticeSettings },
+  { path: '#/cai-dat-thoi-khoa', render: renderScheduleSettings },
+  { path: '#/cai-dat-hien-thi', render: renderDisplaySettings },
+  { path: '#/cai-dat-du-lieu', render: renderDataSettings },
   { path: '#/gioi-thieu', render: renderAbout },
   { path: '#/rieng-tu', render: renderPrivacy },
 ];
@@ -60,6 +69,8 @@ const ctx = {
   },
 
   navigate: (path) => { location.hash = path; },
+  // Về trang đã mở trang này (không biết thì về Cài đặt).
+  goBack: () => { location.hash = previousPath ?? '#/cai-dat'; },
   refresh: () => renderCurrentRoute(),
 };
 
@@ -140,11 +151,17 @@ function showReminder(type) {
 
 let cleanup = null; // Hàm dọn dẹp của màn hình đang mở (nếu có)
 let renderNumber = 0;
+let currentPath = null;
+let previousPath = null;
 
 // Mỗi hàm vẽ nhận (page, ctx), có thể trả về một hàm dọn dẹp,
 // sẽ được gọi khi người dùng rời màn hình đó.
 async function renderCurrentRoute({ moveFocus = false } = {}) {
   const route = ROUTES.find((r) => r.path === location.hash) ?? ROUTES[0];
+  if (route.path !== currentPath) {
+    previousPath = currentPath;
+    currentPath = route.path;
+  }
   const myNumber = ++renderNumber;
   cleanup?.();
   cleanup = null;
@@ -167,7 +184,7 @@ async function renderCurrentRoute({ moveFocus = false } = {}) {
 
   main.replaceChildren(page);
   for (const link of nav.children) {
-    if (link.getAttribute('href') === route.path) link.setAttribute('aria-current', 'page');
+    if ([route.path, route.under].includes(link.getAttribute('href'))) link.setAttribute('aria-current', 'page');
     else link.removeAttribute('aria-current');
   }
   const heading = page.querySelector('h1');

@@ -1,8 +1,8 @@
-// controls.js — Các bộ nút chỉnh cài đặt dùng ở nhiều màn hình.
-// Mỗi hàm trả về { node, cleanup }: phần tử để hiện, và hàm dọn dẹp khi rời màn hình.
+// controls.js — Các bộ nút chỉnh cài đặt niệm Phật.
+// Hàm nào trả về { node, cleanup } thì khi rời màn hình phải gọi cleanup.
 
 import {
-  WOODFISH_BPM, TIMER_CHOICES, MINUTES_LIMIT, COUNT_MODES, BEATS_CHOICES,
+  WOODFISH_BPM, TIMER_CHOICES, MINUTES_LIMIT, BEATS_CHOICES,
   VOICE_SENSITIVITIES, VOICE_SAMPLE_PHRASES, VOICE_PHRASE_MS,
 } from './config.js';
 import { S } from './strings.js';
@@ -34,15 +34,13 @@ export function woodfishControl(ctx) {
     name: 'woodfish', label: T.woodfishModeTitle, value: modeOf(ctx.getSettings()),
     options: ['auto', 'hand', 'off'].map((mode) => ({ value: mode, label: T.woodfishModes[mode] })),
     onchange: (mode) => {
-      const patch = { woodfishOn: mode === 'auto', handWoodfish: mode === 'hand' };
-      // Không dùng mõ thì không đếm theo tiếng mõ được nữa.
-      if (mode === 'off' && ctx.getSettings().countMode === 'woodfish') patch.countMode = 'touch';
-      ctx.updateSettings(patch);
+      ctx.updateSettings({ woodfishOn: mode === 'auto', handWoodfish: mode === 'hand' });
     },
   });
 
   const update = (settings) => {
     modes.setValue(modeOf(settings));
+    modes.hidden = settings.countMode === 'woodfish'; // Cách đếm đã định sẵn ai gõ mõ
     speed.hidden = !settings.woodfishOn;
     value.textContent = T.woodfishValue(settings.woodfishBpm);
     slower.disabled = settings.woodfishBpm <= WOODFISH_BPM.min;
@@ -62,20 +60,27 @@ export function woodfishControl(ctx) {
   };
 }
 
-// Cách đếm: tự chạm, theo tiếng mõ, hoặc nghe tiếng niệm
-export function countControl(ctx, practice) {
+// Bốn cách đếm hiện cho người dùng. Hai cách đếm theo mõ khác nhau ở chỗ ai gõ.
+export function countStyleOf(settings) {
+  if (settings.countMode !== 'woodfish') return settings.countMode;
+  return settings.woodfishOn ? 'autoWoodfish' : 'handWoodfish';
+}
+
+const COUNT_STYLES = {
+  touch: { countMode: 'touch' },
+  handWoodfish: { countMode: 'woodfish', woodfishOn: false, handWoodfish: true },
+  autoWoodfish: { countMode: 'woodfish', woodfishOn: true, handWoodfish: false },
+  voice: { countMode: 'voice', woodfishOn: false }, // Tắt mõ kẻo micro nghe nhầm
+};
+
+export function countControl(ctx) {
   const T = S.counter;
+  const phrase = () => ctx.getSettings().phrase;
 
   const modes = choiceGroup({
-    name: 'count-mode', label: T.countTitle, value: ctx.getSettings().countMode,
-    options: COUNT_MODES.map((value) => ({ value, label: T.countModes[value] })),
-    onchange: (countMode) => {
-      const { woodfishOn, handWoodfish } = ctx.getSettings();
-      const patch = { countMode };
-      if (countMode === 'woodfish' && !woodfishOn && !handWoodfish) patch.woodfishOn = true;
-      if (countMode === 'voice') patch.woodfishOn = false; // Kẻo micro nghe nhầm tiếng mõ
-      ctx.updateSettings(patch);
-    },
+    name: 'count-mode', label: T.countTitle, value: countStyleOf(ctx.getSettings()),
+    options: Object.keys(COUNT_STYLES).map((value) => ({ value, ...T.countStyles[value] })),
+    onchange: (style) => ctx.updateSettings(COUNT_STYLES[style]),
   });
 
   const beats = el('div', { class: 'stack' },
@@ -93,8 +98,8 @@ export function countControl(ctx, practice) {
   const guide = el('p', { 'aria-live': 'polite' });
 
   const saveTempo = (ms) => {
-    const { [practice.phrase]: old, ...others } = ctx.getSettings().voicePhraseMs;
-    ctx.updateSettings({ voicePhraseMs: ms ? { ...others, [practice.phrase]: ms } : others });
+    const { [phrase()]: old, ...others } = ctx.getSettings().voicePhraseMs;
+    ctx.updateSettings({ voicePhraseMs: ms ? { ...others, [phrase()]: ms } : others });
   };
   const stopMeasuring = () => {
     measuring?.close();
@@ -102,8 +107,7 @@ export function countControl(ctx, practice) {
     update();
   };
   const startMeasuring = () => {
-    practice.pause();
-    const current = { totalMs: 0, status: 'starting' };
+    const current = { totalMs: 0, status: 'starting', phrase: phrase() };
     measuring = current;
     current.counter = createPhraseCounter({ onSpan: (ms) => { current.totalMs += ms; } });
     current.close = openMicrophone({
@@ -131,7 +135,8 @@ export function countControl(ctx, practice) {
 
   const voice = el('div', { class: 'stack' },
     T.voiceNotes.map((text) => el('p', {}, text)),
-    el('p', {}, T.sensitivityTitle),
+    tempo, guide, measure, forget, done, cancel,
+    el('p', { class: 'sub-title' }, T.sensitivityTitle),
     choiceGroup({
       name: 'sensitivity', label: T.sensitivityTitle, inline: true,
       value: ctx.getSettings().voiceSensitivity,
@@ -140,16 +145,15 @@ export function countControl(ctx, practice) {
         if (measuring) stopMeasuring();
         ctx.updateSettings({ voiceSensitivity });
       },
-    }),
-    tempo, guide, measure, forget, done, cancel);
+    }));
 
   function update() {
     const settings = ctx.getSettings();
-    modes.setValue(settings.countMode);
+    modes.setValue(countStyleOf(settings));
     beats.hidden = settings.countMode !== 'woodfish';
     voice.hidden = settings.countMode !== 'voice';
 
-    const ms = settings.voicePhraseMs[practice.phrase];
+    const ms = settings.voicePhraseMs[phrase()];
     const status = measuring?.status;
     const isReady = status === 'listening';
     tempo.textContent = ms
@@ -159,7 +163,7 @@ export function countControl(ctx, practice) {
     guide.hidden = !measuring;
     if (measuring) {
       guide.textContent = isReady
-        ? T.tempoGuide(S.phrases[practice.phrase], VOICE_SAMPLE_PHRASES)
+        ? T.tempoGuide(S.phrases[phrase()], VOICE_SAMPLE_PHRASES)
         : T.micStatus[status];
     }
     measure.hidden = Boolean(measuring);
@@ -170,25 +174,19 @@ export function countControl(ctx, practice) {
   update();
 
   const removeSettingsListener = ctx.onSettingsChange(() => {
-    if (measuring && ctx.getSettings().countMode !== 'voice') stopMeasuring();
+    // Đổi cách đếm hoặc đổi câu niệm: thôi đo.
+    const isStale = ctx.getSettings().countMode !== 'voice' || measuring?.phrase !== phrase();
+    if (measuring && isStale) stopMeasuring();
     else update();
   });
   // Chuyển sang app khác: tắt micro.
   const onHidden = () => { if (document.hidden && measuring) stopMeasuring(); };
   document.addEventListener('visibilitychange', onHidden);
-  // Đổi câu niệm, hoặc bắt đầu niệm khi đang đo: thôi đo.
-  let phrase = practice.phrase;
-  const removePracticeListener = practice.onChange(() => {
-    if (measuring && (practice.state === 'running' || practice.phrase !== phrase)) stopMeasuring();
-    else if (practice.phrase !== phrase) update();
-    phrase = practice.phrase;
-  });
 
   return {
     node: el('div', { class: 'stack' }, modes, beats, voice),
     cleanup() {
       removeSettingsListener();
-      removePracticeListener();
       document.removeEventListener('visibilitychange', onHidden);
       if (measuring) stopMeasuring();
     },
@@ -208,7 +206,7 @@ export function stopControl(ctx) {
 }
 
 // Hẹn giờ niệm: các lựa chọn có sẵn hoặc tự nhập số phút
-export function timerControl(ctx, onMinutes) {
+export function timerControl(ctx) {
   const T = S.counter;
   const current = ctx.getSettings().timerMinutes;
   const isCustom = current !== 0 && !TIMER_CHOICES.includes(current);
@@ -218,7 +216,6 @@ export function timerControl(ctx, onMinutes) {
   const choose = (minutes) => {
     stop.hidden = minutes === 0;
     ctx.updateSettings({ timerMinutes: minutes });
-    onMinutes(minutes);
   };
   const custom = numberField({
     label: T.timerCustomLabel, value: isCustom ? current : 20, ...MINUTES_LIMIT,
@@ -239,5 +236,5 @@ export function timerControl(ctx, onMinutes) {
       choose(value === 'custom' ? custom.getValue() : Number(value));
     },
   });
-  return { node: el('div', { class: 'stack' }, group, custom, stop), cleanup: () => {} };
+  return el('div', { class: 'stack' }, group, custom, stop);
 }

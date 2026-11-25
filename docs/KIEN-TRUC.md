@@ -18,14 +18,15 @@ Hiện đã xong **Giai đoạn A** (khung app) và **B** (Niệm Phật, Thời
 | `js/app.js` | Khởi động app và chuyển màn hình. |
 | `js/today.js` | Màn hình Hôm nay. |
 | `js/practice.js` | "Bộ máy" một thời niệm: đếm, tính giờ, lưu dần. Không vẽ giao diện. |
-| `js/counter.js` | Vòng tròn đếm và màn hình Niệm Phật. |
-| `js/schedule.js` | Màn hình Thời khóa và Thập niệm pháp. |
+| `js/counter.js` | Vòng tròn đếm và màn hình Niệm Phật. Chỉ để niệm, không có cài đặt. |
+| `js/schedule.js` | Màn hình Thời khóa. |
+| `js/thapniem.js` | Trang Thập niệm pháp. |
 | `js/sound.js` | Mõ, chuông, khánh, phát file ghi âm. |
 | `js/microphone.js` | Mở micro, đo độ to của tiếng (không ghi âm). |
 | `js/voice.js` | Từ độ to, đoán lúc có tiếng và đếm ra số câu. |
 | `js/device.js` | Rung, giữ sáng màn hình. |
 | `js/reminders.js` | Nhắc giờ thời khóa. |
-| `js/controls.js` | Bộ nút chỉnh mõ, khánh, cách đếm, hẹn giờ dùng ở nhiều màn hình. |
+| `js/controls.js` | Bộ nút chỉnh mõ, khánh, cách đếm, hẹn giờ. |
 | `js/content.js` | Đọc nội dung từ các file JSON. |
 | `js/verses.js` | Hiển thị bài kệ và nhãn CẦN THẨM ĐỊNH. |
 | `content/verses.json` | Tán Phật kệ, Hồi hướng. |
@@ -33,7 +34,7 @@ Hiện đã xong **Giai đoạn A** (khung app) và **B** (Niệm Phật, Thời
 | `audio/playlist.json` | Danh sách file ghi âm; cách thêm xem `audio/README.md`. |
 | `js/calendar.js` | Màn hình Lịch (Giai đoạn C). |
 | `js/lessons.js` | Màn hình Học (Giai đoạn D). |
-| `js/settings.js` | Màn hình Cài đặt. |
+| `js/settings.js` | Cài đặt: trang mục lục và bốn trang con. Mọi lựa chọn nằm ở đây. |
 | `js/info.js` | Trang Giới thiệu và Chính sách riêng tư. |
 
 Sẽ thêm ở giai đoạn sau: `content/holidays.json`, `quotes.json`, `lessons.json`,
@@ -103,7 +104,8 @@ Vài quy tắc:
 Cài đặt `countMode` có ba giá trị. Cách nào thì chạm vòng tròn vẫn cộng thêm một câu.
 
 - `touch`: người dùng tự chạm.
-- `woodfish`: cứ `beatsPerPhrase` tiếng mõ (app gõ hoặc người dùng gõ) thì tính một câu.
+- `woodfish`: cứ `beatsPerPhrase` tiếng mõ thì tính một câu. `woodfishOn` bật thì app gõ;
+  tắt thì vòng tròn chính là cái mõ để người dùng gõ. Trên màn hình đây là hai lựa chọn riêng.
 - `voice`: nghe micro. App chỉ đo độ to, không hiểu lời. Chưa đo nhịp thì mỗi hơi niệm tính một câu;
   đã đo nhịp (`voicePhraseMs`, riêng từng câu niệm) thì lấy độ dài hơi niệm chia cho độ dài một câu.
   Micro chỉ chạy trên `localhost` hoặc địa chỉ `https`.
