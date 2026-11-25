@@ -8,9 +8,11 @@ import { getCountOfDate } from './storage.js';
 import { getVerse, getRecordings } from './content.js';
 import { createPractice } from './practice.js';
 import { unlockSound } from './sound.js';
-import { el, button, pageTitle, menuLink, toast } from './ui.js';
+import { el, button, pageTitle, toast, scrollToTop } from './ui.js';
 import { countStyleOf } from './controls.js';
 import { verseView } from './verses.js';
+
+const MAX_BEAD_SIZE = 360; // px
 
 export const showSaveError = (error) => {
   console.error(error);
@@ -82,37 +84,41 @@ export async function counterView(ctx, practice, { endLabel, onFinish, withTimer
   };
   onPress(bead, press);
 
+  // Vòng tròn to vừa phần trống còn lại của màn hình.
+  const beadArea = el('div', { class: 'bead-area' }, bead);
+  const resizeObserver = new ResizeObserver(() => {
+    const size = Math.floor(Math.min(beadArea.clientWidth, beadArea.clientHeight, MAX_BEAD_SIZE));
+    if (size > 0) beadArea.style.setProperty('--size', `${size}px`);
+  });
+  resizeObserver.observe(beadArea);
+
   const clock = el('p', { class: 'clock' });
-  const micLine = el('p', { class: 'center' });
-  const countLine = el('p', { class: 'center muted' });
+  const micLine = el('p', {});
+  const countLine = el('p', { class: 'muted' });
 
   // --- Tự gõ mõ, gõ khánh
   const knockButton = button(T.knock, { class: 'btn btn-secondary btn-strike' });
   onPress(knockButton, () => practice.knock());
   const chimeButton = button(T.chime, { class: 'btn btn-secondary btn-strike' });
   onPress(chimeButton, () => practice.chime());
-  const strikes = el('div', { class: 'row strikes' }, knockButton, chimeButton);
+  const strikes = el('div', { class: 'row row-narrow' }, knockButton, chimeButton);
 
-  // --- Tạm nghỉ, kết thúc, bớt một câu
+  // --- Bắt đầu, tạm nghỉ, kết thúc, bớt một câu
+  const startOrResume = () => {
+    practice.start();
+    bead.focus({ preventScroll: true }); // Để phím Space/Enter đếm được ngay
+  };
+  const startButton = button(T.start, { variant: 'primary', onclick: startOrResume });
   const pauseButton = button('', {
-    onclick: () => {
-      if (practice.state === 'running') {
-        practice.pause();
-      } else {
-        practice.start();
-        bead.focus({ preventScroll: true }); // Để phím Space/Enter đếm tiếp được ngay
-      }
-    },
+    onclick: () => (practice.state === 'running' ? practice.pause() : startOrResume()),
   });
   const endButton = button(endLabel, { variant: 'primary', onclick: () => practice.finish() });
-  const actions = el('div', { class: 'row strikes' }, pauseButton, endButton);
+  const actions = el('div', { class: 'row row-narrow' }, startButton, pauseButton, endButton);
   const undoButton = button(T.undo, { onclick: () => practice.undo() });
 
   // --- Lối vào trang cài đặt, chỉ hiện khi không niệm
-  const settingsLink = menuLink({
-    href: '#/cai-dat-niem-phat', label: T.settingsLink,
-    note: settingsSummary(ctx.getSettings(), withTimer),
-  });
+  const settingsLink = el('a', { class: 'btn btn-secondary', href: '#/cai-dat-niem-phat' }, T.settingsLink);
+  const tools = el('div', { class: 'row row-narrow' }, undoButton, settingsLink);
 
   // --- Bàn phím: Space/Enter đếm, trừ khi đang đứng ở một nút hay ô nhập khác.
   const isCountKey = (event) => {
@@ -134,6 +140,7 @@ export async function counterView(ctx, practice, { endLabel, onFinish, withTimer
   document.addEventListener('keyup', onKeyUp);
 
   // --- Cập nhật chữ số trên màn hình
+  // Các hàng nút luôn chiếm chỗ như nhau, để bấm vào không làm màn hình nhảy.
   const update = () => {
     const { state, count } = practice;
     const settings = ctx.getSettings();
@@ -152,11 +159,11 @@ export async function counterView(ctx, practice, { endLabel, onFinish, withTimer
     const remaining = practice.remainingSec();
     const elapsed = formatClock(practice.elapsedSec());
     if (practice.goalReached) clock.textContent = T.goalReached(elapsed);
+    else if (isIdle) clock.textContent = settingsSummary(settings, withTimer);
     else clock.textContent = remaining === null ? T.elapsed(elapsed) : T.remaining(formatClock(remaining));
-    clock.hidden = isIdle && remaining === null; // Chưa niệm, không hẹn giờ: chưa có gì để hiện
 
-    micLine.textContent = T.micStatus[practice.micStatus];
-    micLine.hidden = practice.micStatus === 'off';
+    micLine.textContent = T.micStatus[practice.micStatus] || '\u00a0';
+    micLine.hidden = style !== 'voice';
 
     const lines = [practice.goalCount === null
       ? T.todayLine(S.common.number(countBefore + count))
@@ -169,10 +176,11 @@ export async function counterView(ctx, practice, { endLabel, onFinish, withTimer
     knockButton.hidden = !settings.handWoodfish || style === 'handWoodfish';
     chimeButton.hidden = !settings.handChime;
     strikes.hidden = knockButton.hidden && chimeButton.hidden;
-    bead.classList.toggle('compact', !strikes.hidden); // Nhường chỗ cho nút mõ, khánh
-    actions.hidden = isIdle;
+    startButton.hidden = !isIdle;
+    pauseButton.hidden = isIdle;
+    endButton.hidden = isIdle;
     pauseButton.textContent = isRunning ? T.pause : T.resume;
-    undoButton.hidden = count === 0;
+    undoButton.disabled = count === 0;
     settingsLink.hidden = isRunning;
   };
   update();
@@ -184,8 +192,11 @@ export async function counterView(ctx, practice, { endLabel, onFinish, withTimer
 
   return {
     node: el('div', { class: 'counter' },
-      bead, el('div', {}, clock, micLine, countLine), strikes, actions, undoButton, settingsLink),
+      beadArea,
+      el('div', { class: 'status' }, clock, countLine, micLine),
+      strikes, actions, tools),
     cleanup() {
+      resizeObserver.disconnect();
       removeListener();
       document.removeEventListener('keydown', onKeyDown);
       document.removeEventListener('keyup', onKeyUp);
@@ -241,8 +252,6 @@ export async function renderCounter(page, ctx) {
   autoStart = false;
   const practice = getCurrentPractice(ctx);
 
-  // Nạp sẵn bài Hồi hướng, để lúc niệm xong hiện ra ngay.
-  const dedication = await getVerse('hoi-huong');
   const counter = await counterView(ctx, practice, {
     endLabel: T.end,
     withTimer: true,
@@ -252,10 +261,7 @@ export async function renderCounter(page, ctx) {
     },
   });
 
-  // Tiêu đề chỉ dành cho phần mềm đọc màn hình, để vòng tròn được rộng chỗ.
-  const title = pageTitle(T.title);
-  title.classList.add('visually-hidden');
-  page.append(title, counter.node);
+  page.append(pageTitle(T.title), counter.node);
 
   let isCleaned = false;
   function cleanup() {
@@ -264,15 +270,17 @@ export async function renderCounter(page, ctx) {
     counter.cleanup();
   }
 
-  function showDedication() {
+  async function showDedication() {
     cleanup();
-    const heading = pageTitle(dedication.title);
+    // Bài Hồi hướng đã tải sẵn lúc mở app; lỡ mất mạng thì vẫn hiện số câu vừa niệm.
+    const dedication = await getVerse('hoi-huong').catch(() => null);
+    const heading = pageTitle(dedication?.title ?? T.title);
     page.replaceChildren(
       heading,
-      verseView(dedication),
+      dedication ? verseView(dedication) : '',
       ...summaryLine(practice),
       button(T.done, { variant: 'primary', onclick: () => ctx.navigate('#/hom-nay') }));
-    window.scrollTo(0, 0);
+    scrollToTop();
     heading.focus({ preventScroll: true });
   }
 

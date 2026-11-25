@@ -8,7 +8,7 @@ import { createPractice } from './practice.js';
 import { unlockSound } from './sound.js';
 import { counterView, showSaveError, summaryLine } from './counter.js';
 import { getThapNiemSummary } from './thapniem.js';
-import { el, button, pageTitle, card, menuLink } from './ui.js';
+import { el, button, pageTitle, card, menuLink, scrollToTop } from './ui.js';
 import { verseView } from './verses.js';
 
 // Thời khóa đang làm dở: { type: 'morning' | 'evening', step: 0..2, practice, dateKey }
@@ -40,7 +40,7 @@ export async function renderSchedule(page, ctx) {
     if (myNumber !== drawNumber) return; // Đã có lần vẽ mới hơn
     if (isGone) return cleanup();
     page.replaceChildren(...content);
-    window.scrollTo(0, 0);
+    scrollToTop();
     page.querySelector('h1')?.focus({ preventScroll: true });
   }
 
@@ -87,7 +87,7 @@ export async function renderSchedule(page, ctx) {
 
   async function drawStep() {
     const T = S.schedule;
-    const progress = el('p', { class: 'muted' }, T.progress(T.names[flow.type], flow.step + 1, 3));
+    const progress = el('p', { class: 'muted center' }, T.progress(T.names[flow.type], flow.step + 1, 3));
     const exitButton = button(T.exit, { onclick: exit });
 
     if (flow.step === 0) {
@@ -117,9 +117,7 @@ export async function renderSchedule(page, ctx) {
         },
       });
       cleanups.push(counter.cleanup);
-      const title = pageTitle(S.counter.title);
-      title.classList.add('visually-hidden');
-      return [progress, title, counter.node, exitButton];
+      return [progress, pageTitle(S.counter.title), counter.node, exitButton];
     }
 
     const verse = await getVerse('hoi-huong');

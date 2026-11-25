@@ -17,13 +17,13 @@ export const S = {
   },
 
   header: {
-    fontSmaller: 'Giảm cỡ chữ',
-    fontLarger: 'Tăng cỡ chữ',
+    back: 'Quay lại',
+    display: 'Chữ và màu nền',
     settings: 'Cài đặt',
   },
 
   common: {
-    back: 'Quay lại',
+    done: 'Xong',
     cancel: 'Không',
     abort: 'Thôi',
     reviewLabel: 'CẦN THẨM ĐỊNH',
@@ -47,7 +47,6 @@ export const S = {
   },
 
   today: {
-    title: 'Hôm nay',
     solarDate: (d) =>
       `${WEEKDAYS[d.getDay()]}, ngày ${d.getDate()} tháng ${d.getMonth() + 1} năm ${d.getFullYear()}`,
     countLabel: 'Số câu đã niệm hôm nay',
@@ -86,7 +85,8 @@ export const S = {
     chime: 'Gõ khánh',
     undo: 'Bớt một câu',
     beadLabel: (phrase, count) => `${phrase}. Chạm để đếm một câu. Đã đếm ${count} câu.`,
-    settingsLink: 'Cài đặt niệm Phật',
+    start: 'Bắt đầu',
+    settingsLink: 'Cài đặt',
     todayLine: (n) => `Hôm nay: ${n} câu`,
     goalLine: (n, goal) => `${n} trên ${goal} câu`,
     rounds: (rounds, rest) => `${rounds} tràng lẻ ${rest}`,
@@ -174,7 +174,6 @@ export const S = {
 
   settings: {
     title: 'Cài đặt',
-    done: 'Xong',
     menu: {
       practice: {
         label: 'Niệm Phật', title: 'Cài đặt niệm Phật',

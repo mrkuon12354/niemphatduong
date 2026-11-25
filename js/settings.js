@@ -15,7 +15,7 @@ import {
 } from './ui.js';
 
 // Nút cuối mỗi trang con. Cài đặt đã lưu ngay khi chọn, nút này chỉ để quay về.
-const doneButton = (ctx) => button(S.settings.done, { variant: 'primary', onclick: ctx.goBack });
+const doneButton = (ctx) => button(S.common.done, { variant: 'primary', onclick: ctx.goBack });
 
 // ---------------------------------------------------------------------------
 // Mục lục
@@ -54,7 +54,7 @@ export async function renderPracticeSettings(page, ctx) {
       choiceGroup({
         name: 'phrase', label: S.counter.phraseTitle, value: settings.phrase,
         options: PHRASES.map((value) => ({
-          value, label: S.phrases[value], hint: S.phraseLength[value],
+          value, label: S.phrases[value], note: S.phraseLength[value],
         })),
         onchange: (phrase) => ctx.updateSettings({ phrase }),
       })),

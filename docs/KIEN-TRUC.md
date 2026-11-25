@@ -57,6 +57,13 @@ JavaScript chưa chạy được), vì lúc đó app chưa đọc được file 
    - Hàm có thể trả về một "hàm dọn dẹp", được gọi khi rời màn hình.
 
 Muốn thêm một màn hình: viết hàm vẽ, thêm một dòng vào bảng `ROUTES` trong `app.js`.
+Trang con thì thêm `parent`: thanh trên sẽ có nút quay lại.
+
+Thanh trên và thanh dưới đứng yên, chỉ phần giữa (`<main>`) cuộn. Tiêu đề ở thanh trên được chép từ
+thẻ `h1` của trang (hàm `pageTitle()`), nên trang nào cũng phải có `pageTitle()`.
+
+Để giao diện đồng nhất: bo góc dùng `var(--radius)`, khoảng cách dùng `var(--gap)`, nút dùng
+`button()`, dòng mở trang khác dùng `menuLink()`, lựa chọn dùng `choiceGroup()` hoặc `toggle()`.
 
 ## 3. Cấu trúc dữ liệu
 

@@ -5,7 +5,7 @@ import { toDateKey, toLocalIso } from './dates.js';
 import { getSessionsOfDate, addSession, deleteSession } from './storage.js';
 import { getPractice } from './content.js';
 import { showSaveError } from './counter.js';
-import { el, pageTitle, card, toggle } from './ui.js';
+import { el, button, pageTitle, card, toggle } from './ui.js';
 import { reviewLabel } from './verses.js';
 
 // slot (lần nào trong ngày) -> danh sách id các bản ghi hôm nay của lần đó
@@ -72,7 +72,7 @@ export async function renderThapNiem(page, ctx) {
       ...info.description.map((text) => el('p', {}, text)),
       summary,
       el('div', { class: 'choices' }, rows)),
-    el('a', { class: 'btn btn-secondary', href: '#/thoi-khoa' }, S.common.back));
+    button(S.common.done, { variant: 'primary', onclick: ctx.goBack }));
 
   // Để qua nửa đêm: bảng phải sang ngày mới.
   const onVisible = () => {

@@ -21,9 +21,15 @@ export function button(label, { variant = 'secondary', onclick, ...rest } = {}) 
   return el('button', { type: 'button', class: `btn btn-${variant}`, onclick, ...rest }, label);
 }
 
+// Tiêu đề trang. Người dùng nhìn thấy nó ở thanh trên (app.js chép lên đó);
+// thẻ h1 này dành cho phần mềm đọc màn hình.
 export function pageTitle(text) {
   // tabindex -1: để khi chuyển màn hình, máy đọc màn hình đọc tiêu đề trước.
-  return el('h1', { class: 'page-title', tabindex: '-1' }, text);
+  return el('h1', { class: 'visually-hidden', tabindex: '-1' }, text);
+}
+
+export function scrollToTop() {
+  document.getElementById('main')?.scrollTo(0, 0);
 }
 
 export function card(heading, ...children) {
@@ -50,8 +56,8 @@ export function menuLink({ href, label, note }) {
     el('span', { class: 'menu-arrow', 'aria-hidden': 'true' }, '›'));
 }
 
-// Nhóm lựa chọn "chọn một". options: [{ value, label, hint, note }]
-// hint: trong ngoặc, cùng dòng; note: dòng giải thích ở dưới.
+// Nhóm lựa chọn "chọn một". options: [{ value, label, note }]
+// note: dòng giải thích ở dưới.
 // inline: xếp các lựa chọn cạnh nhau thay vì mỗi dòng một lựa chọn.
 export function choiceGroup({ name, label, options, value, onchange, inline = false }) {
   const className = inline ? 'choices choices-inline' : 'choices';
@@ -65,7 +71,6 @@ export function choiceGroup({ name, label, options, value, onchange, inline = fa
         input,
         el('span', { class: 'choice-label' },
           option.label,
-          option.hint ? el('span', { class: 'muted' }, ` (${option.hint})`) : null,
           option.note ? el('span', { class: 'choice-note' }, option.note) : null));
     }));
   // Đổi lựa chọn từ bên ngoài (không gọi onchange).
@@ -126,6 +131,7 @@ const ICONS = {
   schedule: ['M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18z', 'M12 7v5l3.500 2'],
   lessons: ['M12 6C10 4.500 7 4 3 4v14c4 0 7 .5 9 2 2-1.500 5-2 9-2V4c-4 0-7 .5-9 2z', 'M12 6v14'],
   calendar: ['M4 5h16v16H4z', 'M4 10h16M8 2.500V7M16 2.500V7'],
+  back: ['M15 5l-7 7 7 7'],
   settings: ['M4 7h9M19 7h1M4 17h1M11 17h9', 'M16 4.500a2.500 2.500 0 1 0 0 5 2.500 2.500 0 0 0 0-5zM8 14.500a2.500 2.500 0 1 0 0 5 2.500 2.500 0 0 0 0-5z'],
 };
 

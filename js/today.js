@@ -1,6 +1,7 @@
 // today.js — Màn hình "Hôm nay".
 // Ngày âm, ngày trai, ngày vía và câu khai thị sẽ thêm ở Giai đoạn C.
 
+import { APP_NAME } from './config.js';
 import { S } from './strings.js';
 import { toDateKey } from './dates.js';
 import { getCountOfDate } from './storage.js';
@@ -13,8 +14,8 @@ export async function renderToday(page, ctx) {
   const count = await getCountOfDate(dateKey);
 
   page.append(
-    pageTitle(S.today.title),
-    el('p', { class: 'solar-date' }, S.today.solarDate(now)),
+    pageTitle(APP_NAME),
+    el('p', { class: 'solar-date center' }, S.today.solarDate(now)),
     button(S.today.start, { variant: 'primary btn-big', onclick: () => startFreePractice(ctx) }),
     card(S.today.countLabel,
       el('p', { class: 'big-number' },

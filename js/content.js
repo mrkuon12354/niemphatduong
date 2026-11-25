@@ -27,6 +27,13 @@ async function findItem(url, id) {
 export const getVerse = (id) => findItem('content/verses.json', id);
 export const getPractice = (id) => findItem('content/practices.json', id);
 
+// Tải sẵn nội dung khi vừa mở app, để lúc chuyển màn hình không phải đợi mạng.
+export function preloadContent() {
+  for (const url of ['content/verses.json', 'content/practices.json', 'audio/playlist.json']) {
+    loadItems(url).catch(() => {}); // Lỗi thì lúc cần sẽ thử lại
+  }
+}
+
 // Các bản ghi âm thật sự có file. Danh sách trống thì giao diện tự ẩn phần này.
 export async function getRecordings() {
   try {
