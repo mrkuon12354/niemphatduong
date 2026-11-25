@@ -1,0 +1,20 @@
+{
+  "items": [
+    {"id": "thap-trai", "version": 1, "status": "draft", "source": "Danh sách do chủ dự án cung cấp, cần thẩm định lại", "type": "fasting", "title": "Thập trai", "days": [1, 8, 14, 15, 18, 23, 24, 28, 29, 30], "daysInShortMonth": [1, 8, 14, 15, 18, 23, 24, 27, 28, 29]},
+    {"id": "di-lac", "version": 1, "status": "draft", "source": "Danh sách do chủ dự án cung cấp, cần thẩm định lại", "type": "holiday", "month": 1, "day": 1, "title": "Vía Đức Di Lặc"},
+    {"id": "thich-ca-xuat-gia", "version": 1, "status": "draft", "source": "Danh sách do chủ dự án cung cấp, cần thẩm định lại", "type": "holiday", "month": 2, "day": 8, "title": "Phật Thích Ca xuất gia"},
+    {"id": "thich-ca-niet-ban", "version": 1, "status": "draft", "source": "Danh sách do chủ dự án cung cấp, cần thẩm định lại", "type": "holiday", "month": 2, "day": 15, "title": "Phật Thích Ca nhập Niết Bàn"},
+    {"id": "quan-am-dan-sanh", "version": 1, "status": "draft", "source": "Danh sách do chủ dự án cung cấp, cần thẩm định lại", "type": "holiday", "month": 2, "day": 19, "title": "Bồ Tát Quán Thế Âm đản sanh"},
+    {"id": "pho-hien", "version": 1, "status": "draft", "source": "Danh sách do chủ dự án cung cấp, cần thẩm định lại", "type": "holiday", "month": 2, "day": 21, "title": "Vía Bồ Tát Phổ Hiền"},
+    {"id": "van-thu", "version": 1, "status": "draft", "source": "Danh sách do chủ dự án cung cấp, cần thẩm định lại", "type": "holiday", "month": 4, "day": 4, "title": "Vía Bồ Tát Văn Thù"},
+    {"id": "phat-dan", "version": 1, "status": "draft", "source": "Danh sách do chủ dự án cung cấp, cần thẩm định lại", "type": "holiday", "month": 4, "day": 15, "title": "Phật Đản"},
+    {"id": "quan-am-thanh-dao", "version": 1, "status": "draft", "source": "Danh sách do chủ dự án cung cấp, cần thẩm định lại", "type": "holiday", "month": 6, "day": 19, "title": "Bồ Tát Quán Thế Âm thành đạo"},
+    {"id": "dai-the-chi", "version": 1, "status": "draft", "source": "Danh sách do chủ dự án cung cấp, cần thẩm định lại", "type": "holiday", "month": 7, "day": 13, "title": "Vía Bồ Tát Đại Thế Chí"},
+    {"id": "vu-lan", "version": 1, "status": "draft", "source": "Danh sách do chủ dự án cung cấp, cần thẩm định lại", "type": "holiday", "month": 7, "day": 15, "title": "Vu Lan"},
+    {"id": "dia-tang", "version": 1, "status": "draft", "source": "Danh sách do chủ dự án cung cấp, cần thẩm định lại", "type": "holiday", "month": 7, "day": 30, "title": "Vía Bồ Tát Địa Tạng"},
+    {"id": "quan-am-xuat-gia", "version": 1, "status": "draft", "source": "Danh sách do chủ dự án cung cấp, cần thẩm định lại", "type": "holiday", "month": 9, "day": 19, "title": "Bồ Tát Quán Thế Âm xuất gia"},
+    {"id": "duoc-su", "version": 1, "status": "draft", "source": "Danh sách do chủ dự án cung cấp, cần thẩm định lại", "type": "holiday", "month": 9, "day": 30, "title": "Vía Phật Dược Sư"},
+    {"id": "a-di-da", "version": 1, "status": "draft", "source": "Danh sách do chủ dự án cung cấp, cần thẩm định lại", "type": "holiday", "month": 11, "day": 17, "title": "Vía Phật A Di Đà"},
+    {"id": "thich-ca-thanh-dao", "version": 1, "status": "draft", "source": "Danh sách do chủ dự án cung cấp, cần thẩm định lại", "type": "holiday", "month": 12, "day": 8, "title": "Phật Thích Ca thành đạo"}
+  ]
+}

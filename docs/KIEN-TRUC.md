@@ -1,7 +1,7 @@
 # Kiến trúc app Niệm Phật Đường
 
 Tài liệu này dành cho người mới học lập trình. Nó được cập nhật sau mỗi giai đoạn.
-Hiện đã xong **Giai đoạn A** (khung app) và **B** (Niệm Phật, Thời khóa).
+Hiện đã xong **Giai đoạn A** (khung app), **B** (Niệm Phật, Thời khóa) và **C** (âm lịch, Lịch tháng, Hôm nay).
 
 ## 1. Cấu trúc thư mục
 
@@ -32,13 +32,16 @@ Hiện đã xong **Giai đoạn A** (khung app) và **B** (Niệm Phật, Thời
 | `content/verses.json` | Tán Phật kệ, Hồi hướng. |
 | `content/practices.json` | Thập niệm pháp (bản nháp). |
 | `audio/playlist.json` | Danh sách file ghi âm; cách thêm xem `audio/README.md`. |
-| `js/calendar.js` | Màn hình Lịch tháng (Giai đoạn C). |
+| `js/lunar.js` | Đổi ngày dương sang ngày âm (thuật toán Hồ Ngọc Đức), kèm hàm `checkLunar()` tự kiểm tra. |
+| `js/almanac.js` | Một ngày là ngày gì: ngày âm, ngày trai, ngày vía. |
+| `content/holidays.json` | Ngày trai và ngày vía. Cần thẩm định lại. |
+| `content/quotes.json` | Câu nhắc mỗi ngày (câu mẫu, chờ thay). |
+| `js/calendar.js` | Màn hình Lịch tháng. |
 | `js/lessons.js` | Màn hình Bài học (Giai đoạn D). |
 | `js/settings.js` | Cài đặt: trang mục lục và bốn trang con. Mọi lựa chọn nằm ở đây. |
 | `js/info.js` | Trang Giới thiệu và Chính sách riêng tư. |
 
-Sẽ thêm ở giai đoạn sau: `content/holidays.json`, `quotes.json`, `lessons.json`,
-`js/lunar.js` (âm lịch), `icons/`, `manifest.json`, `sw.js`.
+Sẽ thêm ở giai đoạn sau: `content/lessons.json`, `icons/`, `manifest.json`, `sw.js`.
 
 Mỗi mục nội dung có `id`, `version`, `status` và `source`. Khi `status` là `"draft"`, app hiện nhãn
 CẦN THẨM ĐỊNH. Thẩm định xong thì đổi thành `"reviewed"` và ghi nguồn vào `source`.
@@ -122,7 +125,17 @@ Hai tiếng mõ cách nhau `secondsPerPhrase / beatsPerPhrase` giây.
 
 `stopMode`: đủ giờ, đủ câu thì app tự kết thúc (`auto`) hay chỉ đánh chuông (`self`).
 
-## 5. Các bước dự kiến khi lên bản online
+## 5. Âm lịch, ngày trai, ngày vía
+
+- Âm lịch tính theo giờ Việt Nam (+7). Mỗi lần mở app, `checkLunar()` tính lại vài ngày đã biết chắc
+  (Tết 2025, Tết 2026, các tháng nhuận...); sai thì báo trong bảng lỗi của trình duyệt.
+- Trong `holidays.json`, mục `type: "fasting"` là thập trai (`daysInShortMonth` dùng cho tháng 29 ngày),
+  mục `type: "holiday"` là ngày vía, ghi theo ngày và tháng âm.
+- Ngày vía 30 gặp tháng thiếu thì lấy ngày 29. Tháng nhuận không tính ngày vía, vẫn tính ngày trai.
+- Câu nhắc mỗi ngày lấy lần lượt trong `quotes.json`. Khi thay bằng lời trích đúng nguồn: sửa `text`,
+  ghi nguồn vào `source` (app sẽ hiện nguồn), đổi `status` thành `"reviewed"`.
+
+## 6. Các bước dự kiến khi lên bản online
 
 1. Chọn máy chủ (Supabase hoặc Firebase), điền `API_URL` trong `config.js`.
 2. Nới dòng `Content-Security-Policy` trong `index.html` cho đúng địa chỉ máy chủ đó.

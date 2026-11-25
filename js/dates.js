@@ -22,6 +22,17 @@ export function toDateKey(date = new Date()) {
   return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
 }
 
+// App để mở qua nửa đêm: khi quay lại thì gọi callback để vẽ lại cho đúng ngày mới.
+// Trả về hàm để thôi theo dõi.
+export function onNewDay(callback) {
+  const dateKey = toDateKey();
+  const check = () => {
+    if (!document.hidden && toDateKey() !== dateKey) callback();
+  };
+  document.addEventListener('visibilitychange', check);
+  return () => document.removeEventListener('visibilitychange', check);
+}
+
 // Lấy ngày từ chuỗi ISO. Giữ nguyên ngày tại nơi người dùng đã niệm.
 export function dateKeyOfIso(iso) {
   return iso.slice(0, 10);

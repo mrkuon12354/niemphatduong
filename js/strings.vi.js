@@ -6,6 +6,17 @@ const WEEKDAYS = [
   'Chủ Nhật', 'Thứ Hai', 'Thứ Ba', 'Thứ Tư', 'Thứ Năm', 'Thứ Sáu', 'Thứ Bảy',
 ];
 
+const CAN = ['Giáp', 'Ất', 'Bính', 'Đinh', 'Mậu', 'Kỷ', 'Canh', 'Tân', 'Nhâm', 'Quý'];
+const CHI = ['Tý', 'Sửu', 'Dần', 'Mão', 'Thìn', 'Tỵ', 'Ngọ', 'Mùi', 'Thân', 'Dậu', 'Tuất', 'Hợi'];
+
+// Cách gọi ngày âm: mùng 1, rằm, ngày 18...
+function lunarDay({ day }) {
+  if (day === 15) return 'rằm';
+  return day <= 10 ? `mùng ${day}` : `ngày ${day}`;
+}
+const lunarMonth = ({ month, isLeap }) => `tháng ${month}${isLeap ? ' nhuận' : ''}`;
+const lunarYear = ({ year }) => `${CAN[(year + 6) % 10]} ${CHI[(year + 8) % 12]}`;
+
 export const S = {
   nav: {
     label: 'Các mục chính',
@@ -47,12 +58,22 @@ export const S = {
     'a-di-da-phat': '4 chữ',
   },
 
+  weekdaysShort: ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'],
+
+  lunar: {
+    fullDate: (lunar) =>
+      `Âm lịch: ${lunarDay(lunar)} ${lunarMonth(lunar)} năm ${lunarYear(lunar)}`,
+  },
+
   today: {
     solarDate: (d) =>
       `${WEEKDAYS[d.getDay()]}, ngày ${d.getDate()} tháng ${d.getMonth() + 1} năm ${d.getFullYear()}`,
     countLabel: 'Số câu đã niệm hôm nay',
     countUnit: 'câu',
     start: 'Bắt đầu niệm Phật',
+    fasting: (lunar) => `Hôm nay ${lunarDay(lunar)} — ngày trai.`,
+    holiday: (title) => `Hôm nay: ${title}.`,
+    quoteTitle: 'Lời nhắc mỗi ngày',
   },
 
   counter: {
@@ -171,7 +192,24 @@ export const S = {
   },
 
   lessons: { title: 'Bài học' },
-  calendar: { title: 'Lịch tháng' },
+  calendar: {
+    title: 'Lịch tháng',
+    dayTitle: (d) => `${WEEKDAYS[d.getDay()]}, ${d.getDate()}/${d.getMonth() + 1}/${d.getFullYear()}`,
+    month: (d) => `Tháng ${d.getMonth() + 1}/${d.getFullYear()}`,
+    previousMonth: 'Tháng trước',
+    nextMonth: 'Tháng sau',
+    backToToday: 'Về hôm nay',
+    // Lời đọc cho phần mềm đọc màn hình
+    dayLabel: (d, { lunar, isFasting, holidays }) =>
+      [`Ngày ${d.getDate()}`, `âm lịch ${lunarDay(lunar)} ${lunarMonth(lunar)}`,
+        isFasting ? 'ngày trai' : '', ...holidays.map((h) => h.title)].filter(Boolean).join(', '),
+    fasting: 'Ngày trai',
+    ordinary: 'Ngày thường.',
+    count: (n) => `Số câu niệm của tôi: ${n} câu`,
+    legendFasting: 'Ngày trai',
+    legendHoliday: 'Ngày vía',
+    reviewNote: 'Danh sách ngày trai và ngày vía cần được thẩm định lại.',
+  },
 
   settings: {
     title: 'Cài đặt',

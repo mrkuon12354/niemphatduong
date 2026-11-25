@@ -7,6 +7,7 @@ import {
   el, icon, button, toast, applyAppearance, onSystemThemeChange, pageTitle, card, scrollToTop,
 } from './ui.js';
 import { preloadContent } from './content.js';
+import { checkLunar } from './lunar.js';
 import { startReminders } from './reminders.js';
 import { renderToday } from './today.js';
 import { renderCounter } from './counter.js';
@@ -228,6 +229,7 @@ async function start() {
   preloadContent();
   await renderCurrentRoute();
   startReminders(ctx, showReminder);
+  for (const error of checkLunar()) console.error('Âm lịch tính sai.', error);
   if ((await getStorageMode()) === 'memory') toast(S.common.notSaving);
 }
 

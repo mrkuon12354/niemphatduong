@@ -393,6 +393,16 @@ export async function getCountOfDate(dateKey, { exceptId } = {}) {
     .reduce((sum, s) => sum + s.count, 0);
 }
 
+// Tổng số câu của từng ngày có niệm: Map { '2026-11-25' → 324, ... }
+export async function getCountsByDate() {
+  const totals = new Map();
+  for (const session of await getSessions()) {
+    const key = dateKeyOfIso(session.startedAt);
+    totals.set(key, (totals.get(key) ?? 0) + session.count);
+  }
+  return totals;
+}
+
 // Xin trình duyệt đừng tự dọn dữ liệu của app khi máy đầy.
 export async function requestPersistence() {
   try {
