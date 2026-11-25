@@ -8,7 +8,7 @@ import { BEADS_PER_ROUND } from './config.js';
 import { toLocalIso } from './dates.js';
 import { newId, saveSession, requestPersistence } from './storage.js';
 import {
-  unlockSound, playBell, playChime, playKnock, startWoodfish, stopWoodfish, setWoodfishBpm,
+  unlockSound, playBell, playChime, playKnock, startWoodfish, stopWoodfish, setWoodfishInterval,
   playRecording, stopRecording,
 } from './sound.js';
 import { openMicrophone } from './microphone.js';
@@ -270,8 +270,9 @@ export function createPractice({ ctx, type, phrase, goal = null, onSaveError }) 
     if (!settings.woodfishOn) {
       stopWoodfish();
     } else {
-      startWoodfish(settings.woodfishBpm, delaySec, () => beat());
-      setWoodfishBpm(settings.woodfishBpm);
+      const interval = settings.secondsPerPhrase / settings.beatsPerPhrase;
+      startWoodfish(interval, delaySec, () => beat());
+      setWoodfishInterval(interval);
     }
     syncMicrophone(settings);
   }

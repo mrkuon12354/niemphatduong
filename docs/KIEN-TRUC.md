@@ -110,6 +110,9 @@ Cài đặt `countMode` có ba giá trị. Cách nào thì chạm vòng tròn v�
   đã đo nhịp (`voicePhraseMs`, riêng từng câu niệm) thì lấy độ dài hơi niệm chia cho độ dài một câu.
   Micro chỉ chạy trên `localhost` hoặc địa chỉ `https`.
 
+Tốc độ mõ: `secondsPerPhrase` là số giây của một câu, `beatsPerPhrase` là số tiếng mõ trong câu đó.
+Hai tiếng mõ cách nhau `secondsPerPhrase / beatsPerPhrase` giây.
+
 `stopMode`: đủ giờ, đủ câu thì app tự kết thúc (`auto`) hay chỉ đánh chuông (`self`).
 
 ## 5. Các bước dự kiến khi lên bản online

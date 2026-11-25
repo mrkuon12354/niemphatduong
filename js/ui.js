@@ -75,20 +75,27 @@ export function choiceGroup({ name, label, options, value, onchange, inline = fa
   return node;
 }
 
-// Ô nhập số nguyên. Nhập sai hoặc quá giới hạn thì tự sửa về giá trị hợp lệ.
-export function numberField({ label, value, min, max, onchange }) {
+// Ô nhập số. Nhập sai hoặc quá giới hạn thì tự sửa về giá trị hợp lệ.
+// step: 1 = số nguyên, 0.1 = cho phép một số lẻ. unit: chữ đứng sau ô (ví dụ "giây").
+export function numberField({ label, value, min, max, step = 1, unit = null, onchange }) {
   let current = value;
   const input = el('input', {
-    class: 'field', type: 'number', inputmode: 'numeric', min, max, step: 1, value,
+    class: unit ? 'field field-short' : 'field', type: 'number', inputmode: step < 1 ? 'decimal' : 'numeric', min, max, step, value,
     onchange: () => {
-      const typed = Math.round(Number(input.value));
+      const typed = Number((Math.round(Number(input.value) / step) * step).toFixed(2));
       if (input.value !== '' && Number.isFinite(typed)) current = Math.min(max, Math.max(min, typed));
       input.value = current;
       onchange(current);
     },
   });
-  const node = el('label', { class: 'field-row' }, el('span', {}, label), input);
+  const node = el('label', { class: 'field-row' },
+    el('span', {}, label), input, unit ? el('span', {}, unit) : null);
   node.getValue = () => current;
+  // Đổi số từ bên ngoài (không gọi onchange).
+  node.setValue = (newValue) => {
+    current = newValue;
+    input.value = newValue;
+  };
   return node;
 }
 

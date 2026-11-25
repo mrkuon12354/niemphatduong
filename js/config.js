@@ -3,7 +3,7 @@
 
 export const APP_ID = 'niem-phat-duong'; // Mã nội bộ: đừng đổi, vì tên kho dữ liệu dựa vào đây.
 export const APP_NAME = 'Niệm Phật Đường';
-export const APP_VERSION = '0.2.2';
+export const APP_VERSION = '0.2.3';
 
 // Địa chỉ máy chủ. Để trống = app chạy hoàn toàn offline.
 export const API_URL = '';
@@ -16,12 +16,13 @@ export const THEMES = ['light', 'dark', 'auto'];
 // Mã của câu niệm. Chữ hiển thị tương ứng nằm trong strings.vi.js.
 export const PHRASES = ['nam-mo-a-di-da-phat', 'a-di-da-phat'];
 
-// Tốc độ mõ: số tiếng mõ trong một phút.
-export const WOODFISH_BPM = { min: 20, max: 160, step: 5 };
+// Tốc độ mõ do app gõ: một câu dài bao nhiêu giây.
+export const PHRASE_SECONDS = { min: 0.5, max: 30, step: 0.1 };
+export const PHRASE_SECONDS_STEP = 0.5; // Mỗi lần bấm "Nhanh hơn", "Chậm hơn"
 
 // Cách đếm: tự chạm, theo tiếng mõ, hoặc nghe tiếng niệm bằng micro.
 export const COUNT_MODES = ['touch', 'woodfish', 'voice'];
-// Đếm theo tiếng mõ: bao nhiêu tiếng mõ thì tính một câu.
+// Mỗi câu gõ bao nhiêu tiếng mõ.
 export const BEATS_CHOICES = [1, 2, 4, 6];
 export const VOICE_SENSITIVITIES = ['low', 'medium', 'high'];
 // Đo nhịp niệm: niệm mẫu chừng này câu; độ dài một câu (mili giây) phải trong giới hạn.
@@ -49,7 +50,7 @@ export const DEFAULT_SETTINGS = {
   voiceSensitivity: 'medium',
   voicePhraseMs: {},      // Nhịp niệm đã đo: { mã câu niệm: mili giây }
   stopMode: 'auto',       // Đủ giờ, đủ câu: 'auto' = app kết thúc, 'self' = chỉ đánh chuông
-  woodfishBpm: 60,
+  secondsPerPhrase: 3,
   vibrate: true,
   timerMinutes: 0,        // 0 = không hẹn giờ
   recordingId: '',        // '' = không phát ghi âm
@@ -81,7 +82,7 @@ export const SETTING_RULES = {
   voicePhraseMs: (v) => v !== null && typeof v === 'object' && !Array.isArray(v)
     && Object.entries(v).every(([phrase, ms]) => PHRASES.includes(phrase) && isWithin(ms, VOICE_PHRASE_MS)),
   stopMode: (v) => v === 'auto' || v === 'self',
-  woodfishBpm: (v) => isWithin(v, WOODFISH_BPM),
+  secondsPerPhrase: (v) => Number.isFinite(v) && v >= PHRASE_SECONDS.min && v <= PHRASE_SECONDS.max,
   vibrate: isBoolean,
   timerMinutes: (v) => v === 0 || isWithin(v, MINUTES_LIMIT),
   recordingId: (v) => typeof v === 'string',

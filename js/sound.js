@@ -126,9 +126,10 @@ function cancelPending() {
 }
 
 // onBeat: được gọi mỗi khi một tiếng mõ vừa kêu.
-export function startWoodfish(bpm, delaySec, onBeat) {
+// interval: hai tiếng mõ cách nhau bao nhiêu giây.
+export function startWoodfish(interval, delaySec, onBeat) {
   if (!audio || woodfish.timer) return;
-  woodfish.interval = 60 / bpm;
+  woodfish.interval = interval;
   woodfish.nextTime = audio.currentTime + delaySec;
   woodfish.onBeat = onBeat;
   woodfish.timer = setInterval(scheduleAhead, 200);
@@ -142,8 +143,7 @@ export function stopWoodfish() {
   cancelPending();
 }
 
-export function setWoodfishBpm(bpm) {
-  const interval = 60 / bpm;
+export function setWoodfishInterval(interval) {
   if (!woodfish.timer || interval === woodfish.interval) return;
   reportBeats();
   if (!woodfish.timer) return;

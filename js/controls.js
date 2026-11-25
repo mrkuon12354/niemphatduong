@@ -2,7 +2,7 @@
 // Hàm nào trả về { node, cleanup } thì khi rời màn hình phải gọi cleanup.
 
 import {
-  WOODFISH_BPM, TIMER_CHOICES, MINUTES_LIMIT, BEATS_CHOICES,
+  PHRASE_SECONDS, PHRASE_SECONDS_STEP, TIMER_CHOICES, MINUTES_LIMIT, BEATS_CHOICES,
   VOICE_SENSITIVITIES, VOICE_SAMPLE_PHRASES, VOICE_PHRASE_MS,
 } from './config.js';
 import { S } from './strings.js';
@@ -10,21 +10,41 @@ import { openMicrophone } from './microphone.js';
 import { createPhraseCounter } from './voice.js';
 import { el, button, toggle, choiceGroup, numberField, toast } from './ui.js';
 
+// "Mỗi câu gõ mấy tiếng mõ?"
+function beatsControl(ctx, name) {
+  const T = S.counter;
+  const group = choiceGroup({
+    name, label: T.beatsTitle, inline: true,
+    value: String(ctx.getSettings().beatsPerPhrase),
+    options: BEATS_CHOICES.map((n) => ({ value: String(n), label: T.beats(n) })),
+    onchange: (n) => ctx.updateSettings({ beatsPerPhrase: Number(n) }),
+  });
+  const node = el('div', { class: 'stack' }, el('p', { class: 'sub-title' }, T.beatsTitle), group);
+  node.setValue = (n) => group.setValue(String(n));
+  return node;
+}
+
 // Mõ (app gõ, tự gõ, không dùng), tốc độ mõ, và nút tự gõ khánh
 export function woodfishControl(ctx) {
   const T = S.settings;
-  const value = el('p', { class: 'setting-value', 'aria-live': 'polite' });
-  const step = (label, direction) => button(label, {
+  const { min, max } = PHRASE_SECONDS;
+  const seconds = numberField({
+    label: T.secondsLabel, unit: T.secondsUnit, ...PHRASE_SECONDS,
+    value: ctx.getSettings().secondsPerPhrase,
+    onchange: (secondsPerPhrase) => ctx.updateSettings({ secondsPerPhrase }),
+  });
+  const step = (label, change) => button(label, {
     onclick: () => {
-      const next = ctx.getSettings().woodfishBpm + direction * WOODFISH_BPM.step;
-      ctx.updateSettings({
-        woodfishBpm: Math.min(WOODFISH_BPM.max, Math.max(WOODFISH_BPM.min, next)),
-      });
+      const next = ctx.getSettings().secondsPerPhrase + change;
+      ctx.updateSettings({ secondsPerPhrase: Number(Math.min(max, Math.max(min, next)).toFixed(1)) });
     },
   });
-  const slower = step(T.woodfishSlower, -1);
-  const faster = step(T.woodfishFaster, 1);
-  const speed = el('div', { class: 'stack' }, value, el('div', { class: 'row' }, slower, faster));
+  const slower = step(T.woodfishSlower, PHRASE_SECONDS_STEP);
+  const faster = step(T.woodfishFaster, -PHRASE_SECONDS_STEP);
+  const beats = beatsControl(ctx, 'beats-auto');
+  const speed = el('div', { class: 'stack' },
+    el('p', { class: 'sub-title' }, T.secondsTitle),
+    seconds, el('div', { class: 'row row-narrow' }, slower, faster), beats);
 
   const modeOf = (settings) => {
     if (settings.woodfishOn) return 'auto';
@@ -42,9 +62,10 @@ export function woodfishControl(ctx) {
     modes.setValue(modeOf(settings));
     modes.hidden = settings.countMode === 'woodfish'; // Cách đếm đã định sẵn ai gõ mõ
     speed.hidden = !settings.woodfishOn;
-    value.textContent = T.woodfishValue(settings.woodfishBpm);
-    slower.disabled = settings.woodfishBpm <= WOODFISH_BPM.min;
-    faster.disabled = settings.woodfishBpm >= WOODFISH_BPM.max;
+    seconds.setValue(settings.secondsPerPhrase);
+    beats.setValue(settings.beatsPerPhrase);
+    slower.disabled = settings.secondsPerPhrase >= max;
+    faster.disabled = settings.secondsPerPhrase <= min;
   };
   update(ctx.getSettings());
 
@@ -83,14 +104,7 @@ export function countControl(ctx) {
     onchange: (style) => ctx.updateSettings(COUNT_STYLES[style]),
   });
 
-  const beats = el('div', { class: 'stack' },
-    el('p', {}, T.beatsTitle),
-    choiceGroup({
-      name: 'beats', label: T.beatsTitle, inline: true,
-      value: String(ctx.getSettings().beatsPerPhrase),
-      options: BEATS_CHOICES.map((n) => ({ value: String(n), label: T.beats(n) })),
-      onchange: (n) => ctx.updateSettings({ beatsPerPhrase: Number(n) }),
-    }));
+  const beats = beatsControl(ctx, 'beats-hand');
 
   // --- Đo nhịp: nghe người dùng niệm mẫu vài câu rồi chia ra độ dài một câu
   let measuring = null; // { close, counter, totalMs }
@@ -150,7 +164,8 @@ export function countControl(ctx) {
   function update() {
     const settings = ctx.getSettings();
     modes.setValue(countStyleOf(settings));
-    beats.hidden = settings.countMode !== 'woodfish';
+    beats.setValue(settings.beatsPerPhrase);
+    beats.hidden = countStyleOf(settings) !== 'handWoodfish'; // App gõ thì chọn ở phần Mõ và khánh
     voice.hidden = settings.countMode !== 'voice';
 
     const ms = settings.voicePhraseMs[phrase()];
